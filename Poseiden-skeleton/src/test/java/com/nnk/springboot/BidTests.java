@@ -21,16 +21,19 @@ public class BidTests {
 
 	@Test
 	public void bidListTest() {
-		BidList bid = new BidList("Account Test", "Type Test", 10d);
+		BidList bid = new BidList();
+		bid.setAccount("account Test");
+		bid.setType("type Test");
+		bid.setBidQuantity(10d);
 
 		// Save
-		bid = bidListRepository.save(bid);
+		bidListRepository.save(bid);
 		Assert.assertNotNull(bid.getBidListId());
 		Assert.assertEquals(bid.getBidQuantity(), 10d, 10d);
 
 		// Update
 		bid.setBidQuantity(20d);
-		bid = bidListRepository.save(bid);
+		bidListRepository.save(bid);
 		Assert.assertEquals(bid.getBidQuantity(), 20d, 20d);
 
 		// Find

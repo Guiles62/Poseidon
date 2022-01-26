@@ -21,16 +21,20 @@ public class RatingTests {
 
 	@Test
 	public void ratingTest() {
-		Rating rating = new Rating("Moodys Rating", "Sand PRating", "Fitch Rating", 10);
+		Rating rating = new Rating();
+		rating.setMoodysRating("Moodys Rating");
+		rating.setSandPRating("sand PRating");
+		rating.setFitchRating("Fitch Rating");
+		rating.setOrderNumber(10);
 
 		// Save
-		rating = ratingRepository.save(rating);
+		ratingRepository.save(rating);
 		Assert.assertNotNull(rating.getId());
 		Assert.assertTrue(rating.getOrderNumber() == 10);
 
 		// Update
 		rating.setOrderNumber(20);
-		rating = ratingRepository.save(rating);
+		ratingRepository.save(rating);
 		Assert.assertTrue(rating.getOrderNumber() == 20);
 
 		// Find
