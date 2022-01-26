@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @Controller
@@ -36,7 +37,7 @@ public class BidListController {
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return bid list
         if(!result.hasErrors()) {
-            bidListService.addBid(bid);
+            bidListService.saveBid(bid);
             model.addAttribute("bidList", bidListService.getBidList());
             return "redirect:bidList/list ";
         }
@@ -46,7 +47,7 @@ public class BidListController {
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get Bid by Id and to model then show to the form
-        model.addAttribute("bid",bidListService.getBidById(id));
+        model.addAttribute("bid",bidListService.findById(id));
         return "bidList/update";
     }
 
@@ -55,7 +56,8 @@ public class BidListController {
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
         if (!result.hasErrors()) {
-            bidListService.addBidById(id,bidList);
+            BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+            bidListService.saveBid(bid);
             model.addAttribute("bidList", bidListService.getBidList());
         }
         return "redirect:/bidList/list";
@@ -64,7 +66,8 @@ public class BidListController {
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
-        bidListService.deleteById(id);
+        BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        bidListService.deleteBid(bid);
         return "redirect:/bidList/list";
     }
 }
