@@ -68,6 +68,7 @@ public class BidListController {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         bidListService.deleteBid(bid);
+        model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";
     }
 }
