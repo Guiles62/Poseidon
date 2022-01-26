@@ -8,13 +8,22 @@ import javax.validation.constraints.NotBlank;
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "Id")
     private Integer id;
+
+    @Column(name = "username")
     @NotBlank(message = "Username is mandatory")
-    private String username;
+    private String userName;
+
+    @Column(name = "password")
     @NotBlank(message = "Password is mandatory")
     private String password;
+
+    @Column(name = "fullname")
     @NotBlank(message = "FullName is mandatory")
-    private String fullname;
+    private String fullName;
+
+    @Column(name = "role")
     @NotBlank(message = "Role is mandatory")
     private String role;
 
@@ -26,12 +35,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -42,12 +51,12 @@ public class User {
         this.password = password;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getRole() {
