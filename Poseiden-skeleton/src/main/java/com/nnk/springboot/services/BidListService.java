@@ -27,6 +27,13 @@ public class BidListService {
         return bidListRepository.findById(id);
     }
 
+    public BidList updateBid (int id, BidList bidList) {
+        bidList.setBidListId(id);
+        bidList.setType(bidList.getType());
+        bidList.setBidQuantity(bidList.getBidQuantity());
+        return bidListRepository.save(bidList);
+    }
+
     public void deleteBid(BidList bid) {
         bidListRepository.delete(bid);
     }

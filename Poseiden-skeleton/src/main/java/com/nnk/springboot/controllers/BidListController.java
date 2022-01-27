@@ -55,18 +55,19 @@ public class BidListController {
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
-        if (!result.hasErrors()) {
-            BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            bidListService.saveBid(bid);
-            model.addAttribute("bidList", bidListService.getBidList());
+        if (result.hasErrors()) {
+            return "bidList/update";
         }
+        bidList = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+        bidListService.updateBid(id,bidList);
+        model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
-        BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
         bidListService.deleteBid(bid);
         model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";
