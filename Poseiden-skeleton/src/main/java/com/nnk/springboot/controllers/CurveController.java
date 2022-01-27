@@ -36,7 +36,7 @@ public class CurveController {
         // TODO: check data valid and save to db, after saving return Curve list
         if (!result.hasErrors()){
             curveService.saveCurvePoint(curvePoint);
-            model.addAttribute("curvePoint",curveService.getCurvePointList());
+            model.addAttribute("curvePoints",curveService.getCurvePointList());
             return "redirect:/curvePoint/list";
         }
         return "curvePoint/add";
@@ -59,7 +59,7 @@ public class CurveController {
         }
         curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
         curveService.updateCurvePoint(id,curvePoint);
-        model.addAttribute("curvePoint",curveService.getCurvePointList());
+        model.addAttribute("curvePoints",curveService.getCurvePointList());
         return "redirect:/curvePoint/list";
     }
 
@@ -68,7 +68,7 @@ public class CurveController {
         // TODO: Find Curve by Id and delete the Curve, return to Curve list
         CurvePoint curvePoint1 = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
         curveService.delete(curvePoint1);
-        model.addAttribute("curvePoint",curveService.getCurvePointList());
+        model.addAttribute("curvePoints",curveService.getCurvePointList());
         return "redirect:/curvePoint/list";
     }
 }
