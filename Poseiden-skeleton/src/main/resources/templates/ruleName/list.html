@@ -41,6 +41,19 @@
 			</thead>
 			<tbody>
 			<!-- TODO: Show all RuleName to the table, the Action column will have Edit & Delete buttons -->
+			<tr th:each="ruleNane : ${ruleNames}">
+				<td style="width: 10%" th:text="${ruleNane.id}"></td>
+				<td th:text="${ruleNane.name}"></td>
+				<td th:text="${ruleNane.description}"></td>
+				<td th:text="${ruleNane.json}"></td>
+				<td th:text="${ruleNane.template}"></td>
+				<td th:text="${ruleNane.sqlStr}"></td>
+				<td style="width: 25%" th:text="${ruleNane.sqlPart}"></td>
+				<td style="width: 15%" class="text-center">
+					<a th:href="@{/ruleName/update/{id}(id=${ruleNane.id})}">Edit</a>&nbsp;|&nbsp;
+					<a th:href="@{/ruleName/delete/{id}(id=${ruleNane.id})}">Delete</a>
+				</td>
+			</tr>
 			</tbody>
 		</table>
 	</div>
