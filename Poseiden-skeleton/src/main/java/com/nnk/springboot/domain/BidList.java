@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Required;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -15,7 +14,7 @@ public class BidList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BidListId")
-    private int bidListId;
+    private Integer bidListId;
 
     @Column(name = "account")
     @NotBlank(message = "Account is mandatory") // est équivalent à @Required ?
@@ -83,11 +82,11 @@ public class BidList {
     @Column(name = "side")
     private String side;
 
-    public int getBidListId() {
+    public Integer getBidListId() {
         return bidListId;
     }
 
-    public void setBidListId(int bidListId) {
+    public void setBidListId(Integer bidListId) {
         this.bidListId = bidListId;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User addUser (User user) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
         return userRepository.save(user);
     }
 
@@ -32,9 +36,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateUser (int id, User user) {
+        User userFind = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setId(id);
+        userFind.setFullName(user.getFullName());
+        userFind.setUserName(user.getUserName());
+        userFind.setRole(user.getRole());
+        userFind.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -45,6 +52,6 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userRepository.findByUserName(s);
+        return (UserDetails) userRepository.findByUserName(s);
     }
 }

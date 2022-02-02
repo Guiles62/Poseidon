@@ -13,7 +13,7 @@ public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TradeId")
-    private int tradeId;
+    private Integer tradeId;
 
     @Column(name = "account")
     private String account;
@@ -75,11 +75,11 @@ public class Trade {
     @Column(name = "side")
     private String side;
 
-    public int getTradeId() {
+    public Integer getTradeId() {
         return tradeId;
     }
 
-    public void setTradeId(int tradeId) {
+    public void setTradeId(Integer tradeId) {
         this.tradeId = tradeId;
     }
 

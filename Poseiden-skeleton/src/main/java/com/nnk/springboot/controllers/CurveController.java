@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 
 @Controller
 public class CurveController {
@@ -57,7 +58,6 @@ public class CurveController {
         if (result.hasErrors()) {
             return "curvePoint/update";
         }
-        curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
         curveService.updateCurvePoint(id,curvePoint);
         model.addAttribute("curvePoints",curveService.getCurvePointList());
         return "redirect:/curvePoint/list";

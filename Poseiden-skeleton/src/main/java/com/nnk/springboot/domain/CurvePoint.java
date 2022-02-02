@@ -16,11 +16,11 @@ public class CurvePoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private int id;
+    private Integer id;
 
     @Column(name = "CurveId")
     @NotNull(message = "must not be null")
-    private int curveId;
+    private Integer curveId;
 
     @Column(name = "asOfDate")
     private Timestamp asOfDate;
@@ -34,19 +34,19 @@ public class CurvePoint {
     @Column(name = "creationDate")
     private Timestamp creationDate;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCurveId() {
+    public Integer getCurveId() {
         return curveId;
     }
 
-    public void setCurveId(int curveId) {
+    public void setCurveId(Integer curveId) {
         this.curveId = curveId;
     }
 

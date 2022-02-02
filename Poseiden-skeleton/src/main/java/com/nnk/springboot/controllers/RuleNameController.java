@@ -58,7 +58,6 @@ public class RuleNameController {
         if (result.hasErrors()) {
             return "ruleName/update";
         }
-        ruleName = ruleNameService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
         ruleNameService.updateRuleName(id,ruleName);
         model.addAttribute("ruleNames",ruleNameService.getRuleNameList());
         return "redirect:/ruleName/list";

@@ -57,7 +57,6 @@ public class RatingController {
         if (result.hasErrors()) {
             return "rating/update";
         }
-        rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
         ratingService.updateRating(id,rating);
         model.addAttribute("ratings",ratingService.getRatingList());
         return "redirect:/rating/list";

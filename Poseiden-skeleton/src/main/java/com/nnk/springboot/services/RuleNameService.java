@@ -27,14 +27,14 @@ public class RuleNameService {
     }
 
     public RuleName updateRuleName (int id, RuleName ruleName) {
-        ruleName.setId(id);
-        ruleName.setName(ruleName.getName());
-        ruleName.setSqlPart(ruleName.getSqlPart());
-        ruleName.setSqlStr(ruleName.getSqlStr());
-        ruleName.setJson(ruleName.getJson());
-        ruleName.setTemplate(ruleName.getTemplate());
-        ruleName.setDescription(ruleName.getDescription());
-        return ruleNameRepository.save(ruleName);
+        RuleName rule = ruleNameRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
+        rule.setName(ruleName.getName());
+        rule.setDescription(ruleName.getDescription());
+        rule.setJson(ruleName.getJson());
+        rule.setTemplate(ruleName.getTemplate());
+        rule.setSqlStr(ruleName.getSqlStr());
+        rule.setSqlPart(ruleName.getSqlPart());
+        return ruleNameRepository.save(rule);
     }
 
     public void delete(RuleName ruleName) {

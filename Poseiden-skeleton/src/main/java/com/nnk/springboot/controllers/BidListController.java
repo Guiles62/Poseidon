@@ -60,7 +60,6 @@ public class BidListController {
         if (result.hasErrors()) {
             return "bidList/update";
         }
-        bidList = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
         bidListService.updateBid(id,bidList);
         model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";

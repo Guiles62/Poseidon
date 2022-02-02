@@ -3,6 +3,7 @@ package com.nnk.springboot;
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +20,27 @@ public class BidTests {
 	@Autowired
 	private BidListRepository bidListRepository;
 
+
 	@Test
 	public void bidListTest() {
 		BidList bid = new BidList();
 		bid.setAccount("account Test");
 		bid.setType("type Test");
 		bid.setBidQuantity(10d);
+		bid.setBidListId(1);
+
 
 		// Save
-		bidListRepository.save(bid);
+		bid = bidListRepository.save(bid);
 		Assert.assertNotNull(bid.getBidListId());
-		Assert.assertEquals(bid.getBidQuantity(), 10d, 10d);
+		Assert.assertTrue(bid.getBidQuantity() == 10d);
+
 
 		// Update
 		bid.setBidQuantity(20d);
-		bidListRepository.save(bid);
-		Assert.assertEquals(bid.getBidQuantity(), 20d, 20d);
+		bid = bidListRepository.save(bid);
+		Assert.assertTrue(bid.getBidQuantity() == 20d);
+
 
 		// Find
 		List<BidList> listResult = bidListRepository.findAll();

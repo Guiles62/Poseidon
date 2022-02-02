@@ -27,12 +27,12 @@ public class RatingService {
     }
 
     public Rating updateRating(int id, Rating rating) {
-        rating.setId(id);
-        rating.setFitchRating(rating.getFitchRating());
-        rating.setSandPRating(rating.getSandPRating());
-        rating.setMoodysRating(rating.getMoodysRating());
-        rating.setOrderNumber(rating.getOrderNumber());
-        return ratingRepository.save(rating);
+        Rating ratingFind = ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
+        ratingFind.setMoodysRating(rating.getMoodysRating());
+        ratingFind.setSandPRating(rating.getSandPRating());
+        ratingFind.setFitchRating(rating.getFitchRating());
+        ratingFind.setOrderNumber(rating.getOrderNumber());
+        return ratingRepository.save(ratingFind);
     }
 
     public void delete(Rating rating) {

@@ -28,28 +28,28 @@ public class TradeService {
 
     public Trade updateTrade(int id, Trade trade) {
         // voir ce qu'il y a à mettre réellement à jour
-        trade.setTradeId(id);
-        trade.setAccount(trade.getAccount());
-        trade.setType(trade.getType());
-        trade.setBuyQuantity(trade.getBuyQuantity());
-        trade.setSellQuantity(trade.getSellQuantity());
-        trade.setBuyPrice(trade.getBuyPrice());
-        trade.setSellPrice(trade.getSellPrice());
-        trade.setBenchmark(trade.getBenchmark());
-        trade.setTradeDate(trade.getTradeDate());
-        trade.setSecurity(trade.getSecurity());
-        trade.setStatus(trade.getStatus());
-        trade.setTrader(trade.getTrader());
-        trade.setBook(trade.getBook());
-        trade.setCreationName(trade.getCreationName());
-        trade.setCreationDate(trade.getCreationDate());
-        trade.setRevisionName(trade.getRevisionName());
-        trade.setRevisionDate(trade.getRevisionDate());
-        trade.setDealName(trade.getDealName());
-        trade.setDealType(trade.getDealType());
-        trade.setSourceListId(trade.getSourceListId());
-        trade.setSide(trade.getSide());
-        return tradeRepository.save(trade);
+        Trade tradeFind = tradeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
+        tradeFind.setAccount(trade.getAccount());
+        tradeFind.setType(trade.getType());
+        tradeFind.setBuyQuantity(trade.getBuyQuantity());
+        tradeFind.setSellQuantity(trade.getSellQuantity());
+        tradeFind.setBuyPrice(trade.getBuyPrice());
+        tradeFind.setSellPrice(trade.getSellPrice());
+        tradeFind.setBenchmark(trade.getBenchmark());
+        tradeFind.setTradeDate(trade.getTradeDate());
+        tradeFind.setSecurity(trade.getSecurity());
+        tradeFind.setStatus(trade.getStatus());
+        tradeFind.setTrader(trade.getTrader());
+        tradeFind.setBook(trade.getBook());
+        tradeFind.setCreationName(trade.getCreationName());
+        tradeFind.setCreationDate(trade.getCreationDate());
+        tradeFind.setRevisionName(trade.getRevisionName());
+        tradeFind.setRevisionDate(trade.getRevisionDate());
+        tradeFind.setDealName(trade.getDealName());
+        tradeFind.setDealType(trade.getDealType());
+        tradeFind.setSourceListId(trade.getSourceListId());
+        tradeFind.setSide(trade.getSide());
+        return tradeRepository.save(tradeFind);
     }
 
     public void delete(Trade trade) {

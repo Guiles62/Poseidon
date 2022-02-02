@@ -28,10 +28,29 @@ public class BidListService {
     }
 
     public BidList updateBid (int id, BidList bidList) {
-        bidList.setBidListId(id);
-        bidList.setType(bidList.getType());
-        bidList.setBidQuantity(bidList.getBidQuantity());
-        return bidListRepository.save(bidList);
+        BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+        bid.setAccount(bidList.getAccount());
+        bid.setType(bidList.getType());
+        bid.setBidQuantity(bidList.getBidQuantity());
+        bid.setAskQuantity(bidList.getAskQuantity());
+        bid.setBid(bidList.getBid());
+        bid.setAsk(bidList.getAsk());
+        bid.setBenchmark(bidList.getBenchmark());
+        bid.setBidListDate(bidList.getBidListDate());
+        bid.setCommentary(bidList.getCommentary());
+        bid.setSecurity(bidList.getSecurity());
+        bid.setStatus(bidList.getStatus());
+        bid.setTrader(bidList.getTrader());
+        bid.setBook(bidList.getBook());
+        bid.setCreationName(bidList.getCreationName());
+        bid.setCreationDate(bidList.getCreationDate());
+        bid.setRevisionName(bidList.getRevisionName());
+        bid.setRevisionDate(bidList.getRevisionDate());
+        bid.setDealName(bidList.getDealName());
+        bid.setDealType(bidList.getDealType());
+        bid.setSourceListId(bidList.getSourceListId());
+        bid.setSide(bidList.getSide());
+        return bidListRepository.save(bid);
     }
 
     public void deleteBid(BidList bid) {

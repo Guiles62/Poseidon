@@ -58,7 +58,6 @@ public class TradeController {
         if (result.hasErrors()) {
             return "trade/update";
         }
-        trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
         tradeService.updateTrade(id, trade);
         model.addAttribute("trades",tradeService.getTradeList());
         return "redirect:/trade/list";

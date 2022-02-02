@@ -54,8 +54,7 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/update";
         }
-        user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userService.addUser(user);
+        userService.updateUser(id,user);
         model.addAttribute("users", userService.getUserList());
         return "redirect:/user/list";
     }

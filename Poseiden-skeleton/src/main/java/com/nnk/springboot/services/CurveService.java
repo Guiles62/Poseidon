@@ -5,6 +5,9 @@ import com.nnk.springboot.repositories.CurvePointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,10 +30,13 @@ public class CurveService {
     }
 
     public CurvePoint updateCurvePoint(int id, CurvePoint curvePoint) {
-        curvePoint.setCurveId(id);
-        curvePoint.setTerm(curvePoint.getTerm());
-        curvePoint.setValue(curvePoint.getValue());
-        return curvePointRepository.save(curvePoint);
+        CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
+        curve.setCurveId(curvePoint.getCurveId());
+        curve.setAsOfDate(curvePoint.getAsOfDate());
+        curve.setTerm(curvePoint.getTerm());
+        curve.setValue(curvePoint.getValue());
+        curve.setCreationDate(Timestamp.from(Instant.now()));
+        return curvePointRepository.save(curve);
     }
 
     public void delete(CurvePoint curvePoint) {
