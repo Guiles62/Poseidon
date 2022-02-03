@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -36,9 +38,9 @@ public class UserService implements UserDetailsService {
     public User addUser (User user) {
         try {
             logger.info("addUser");
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String password = passwordEncoder.encode(user.getPassword());
-            user.setPassword(password);
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String password = passwordEncoder.encode(user.getPassword());
+                user.setPassword(password);
         } catch (Exception ex) {
             logger.error("addUser error");
         }

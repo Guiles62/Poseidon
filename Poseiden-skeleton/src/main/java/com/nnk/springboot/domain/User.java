@@ -24,7 +24,8 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "password")
     @NotBlank(message = "Password is mandatory")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,}$",
+            message = "password must contain at least one uppercase letter, at least 8 characters, at least one number and one symbol")
     private String password;
 
     @Column(name = "fullname")
