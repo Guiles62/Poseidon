@@ -40,7 +40,7 @@ public class BidListController {
         if(!result.hasErrors()) {
             bidListService.saveBid(bid);
             model.addAttribute("bidList", bidListService.getBidList());
-            return "redirect:bidList/list ";
+            return "redirect:/bidList/list ";
         }
         return "bidList/add";
     }

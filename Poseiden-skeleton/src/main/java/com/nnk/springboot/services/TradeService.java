@@ -5,6 +5,7 @@ import com.nnk.springboot.repositories.TradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,10 @@ public class TradeService {
     }
 
     public Trade saveTrade (Trade trade) {
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
+        trade.setCreationDate(creationDate);
+        trade.setTradeDate(tradeDate);
         return tradeRepository.save(trade);
     }
 
@@ -29,6 +34,8 @@ public class TradeService {
     public Trade updateTrade(int id, Trade trade) {
         // voir ce qu'il y a à mettre réellement à jour
         Trade tradeFind = tradeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
+        Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
+        Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
         tradeFind.setAccount(trade.getAccount());
         tradeFind.setType(trade.getType());
         tradeFind.setBuyQuantity(trade.getBuyQuantity());
@@ -36,15 +43,14 @@ public class TradeService {
         tradeFind.setBuyPrice(trade.getBuyPrice());
         tradeFind.setSellPrice(trade.getSellPrice());
         tradeFind.setBenchmark(trade.getBenchmark());
-        tradeFind.setTradeDate(trade.getTradeDate());
+        tradeFind.setTradeDate(tradeDate);
         tradeFind.setSecurity(trade.getSecurity());
         tradeFind.setStatus(trade.getStatus());
         tradeFind.setTrader(trade.getTrader());
         tradeFind.setBook(trade.getBook());
         tradeFind.setCreationName(trade.getCreationName());
-        tradeFind.setCreationDate(trade.getCreationDate());
         tradeFind.setRevisionName(trade.getRevisionName());
-        tradeFind.setRevisionDate(trade.getRevisionDate());
+        tradeFind.setRevisionDate(revisionDate);
         tradeFind.setDealName(trade.getDealName());
         tradeFind.setDealType(trade.getDealType());
         tradeFind.setSourceListId(trade.getSourceListId());

@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.apache.tomcat.jni.Time.now;
 
 @Service
 public class CurveService {
@@ -22,6 +25,8 @@ public class CurveService {
     }
 
     public CurvePoint saveCurvePoint (CurvePoint curvePoint) {
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        curvePoint.setCreationDate(creationDate);
         return curvePointRepository.save(curvePoint);
     }
 
@@ -31,11 +36,11 @@ public class CurveService {
 
     public CurvePoint updateCurvePoint(int id, CurvePoint curvePoint) {
         CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
+        Timestamp asOfDate = new Timestamp(System.currentTimeMillis());
         curve.setCurveId(curvePoint.getCurveId());
-        curve.setAsOfDate(curvePoint.getAsOfDate());
+        curve.setAsOfDate(asOfDate);
         curve.setTerm(curvePoint.getTerm());
         curve.setValue(curvePoint.getValue());
-        curve.setCreationDate(Timestamp.from(Instant.now()));
         return curvePointRepository.save(curve);
     }
 

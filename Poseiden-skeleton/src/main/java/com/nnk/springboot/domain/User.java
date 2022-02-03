@@ -1,10 +1,12 @@
 package com.nnk.springboot.domain;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -22,6 +24,7 @@ public class User implements Serializable, UserDetails {
 
     @Column(name = "password")
     @NotBlank(message = "Password is mandatory")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&./])[A-Za-z0-9@$!%*?&./]{8,}$")
     private String password;
 
     @Column(name = "fullname")
