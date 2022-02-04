@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @Controller
@@ -23,6 +24,7 @@ public class UserController {
 
     private final static Logger logger = LogManager.getLogger("UserController");
 
+    @RolesAllowed("ADMIN")
     @RequestMapping("/user/list")
     public String home(Model model) {
         try {

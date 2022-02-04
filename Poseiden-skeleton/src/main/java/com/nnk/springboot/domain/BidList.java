@@ -1,10 +1,10 @@
 package com.nnk.springboot.domain;
 
-import org.springframework.beans.factory.annotation.Required;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
 @Entity
@@ -26,15 +26,19 @@ public class BidList {
 
     @Column(name = "bidQuantity")
     @Digits(integer = 2, fraction = 1) // soit ex : 10.0
+    @Positive
     private Double bidQuantity;
 
     @Column(name = "askQuantity")
+    @Positive
     private Double askQuantity;
 
     @Column(name = "bid")
+    @Positive
     private Double bid;
 
     @Column(name = "ask")
+    @Positive
     private Double ask;
 
     @Column(name = "benchmark")

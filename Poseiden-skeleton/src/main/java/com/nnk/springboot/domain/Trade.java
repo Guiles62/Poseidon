@@ -1,7 +1,9 @@
 package com.nnk.springboot.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
 
@@ -22,15 +24,21 @@ public class Trade {
     private String type;
 
     @Column(name = "buyQuantity")
+    @Positive
     private Double buyQuantity;
 
     @Column(name = "sellQuantity")
+    @Positive
     private Double sellQuantity;
 
     @Column(name = "buyPrice")
+    @Positive
+    @Digits(integer = 2, fraction = 1)
     private Double buyPrice;
 
     @Column(name = "sellPrice")
+    @Digits(integer = 2, fraction = 1)
+    @Positive
     private Double sellPrice;
 
     @Column(name = "benchmark")

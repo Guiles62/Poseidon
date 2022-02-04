@@ -3,8 +3,10 @@ package com.nnk.springboot.domain;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
 
@@ -26,9 +28,12 @@ public class CurvePoint {
     private Timestamp asOfDate;
 
     @Column(name = "term")
+    @Positive
     private Double term;
 
     @Column(name = "value")
+    @Digits(integer = 2, fraction = 1)
+    @Positive
     private Double value;
 
     @Column(name = "creationDate")
