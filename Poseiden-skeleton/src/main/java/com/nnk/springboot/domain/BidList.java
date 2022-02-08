@@ -1,9 +1,12 @@
 package com.nnk.springboot.domain;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
@@ -25,6 +28,7 @@ public class BidList {
     private String type;
 
     @Column(name = "bidQuantity")
+    @NotNull(message = "Quantity is mandatory")
     @Digits(integer = 2, fraction = 1) // soit ex : 10.0
     @Positive
     private Double bidQuantity;

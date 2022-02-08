@@ -32,7 +32,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/rating/**").authenticated()
                 .antMatchers("/ruleName/**").authenticated()
                 .antMatchers("/trade/**").authenticated()
-                .antMatchers("/bidList/update").hasRole("ADMIN")
+                .antMatchers("/bidList/update").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/curvePoint/update").hasRole("ADMIN")
                 .antMatchers("/rating/update").hasRole("ADMIN")
                 .antMatchers("/ruleName/update").hasRole("ADMIN")

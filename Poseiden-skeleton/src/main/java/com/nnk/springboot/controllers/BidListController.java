@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-
+import java.sql.Timestamp;
 
 
 @Controller
@@ -24,6 +24,7 @@ public class BidListController {
     BidListService bidListService;
 
     private final static Logger logger = LogManager.getLogger("BidListController");
+
 
     @RequestMapping("/bidList/list")
     public String home(Model model) {
