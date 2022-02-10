@@ -70,7 +70,7 @@
 			<div class="form-group">
 				<label for="bidListDate" class="col-sm-2 control-label">Bid List Date</label>
 				<div class="col-sm-10">
-					<input type="datetime-local" th:field="*{bidListDate}" id="bidListDate" placeholder="yyyy-mm-dd hh:mm:ss" class="col-4">
+					<input type="text" th:field="*{bidListDate}" id="bidListDate" placeholder="yyyy-mm-dd hh:mm:ss" class="col-4">
 					<p class="text-danger" th:if="${#fields.hasErrors('bidListDate')}" th:errors="*{bidListDate}"></p>
 				</div>
 			</div>

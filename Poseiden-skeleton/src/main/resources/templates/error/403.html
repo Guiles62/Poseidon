@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title> Spring Boot </title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" >
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-6 text-left m-5">
+   <h3>Access Denied Exception</h3>
+   <div>
+	    Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
+	    <form class="pt-3" th:action="@{/app-logout}" method="POST">
+	         <input class="btn btn-primary btn-sm" type="submit" value="Logout"/>
+	    </form>
+   </div>
+
+
+    <p class="error pt-5" style="color: #a71d2a" >You are not authorized for the requested data.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>   

@@ -28,7 +28,7 @@ public class TradeTests {
 		// Save
 		trade = tradeRepository.save(trade);
 		Assert.assertNotNull(trade.getTradeId());
-		Assert.assertTrue(trade.getAccount().equals("Trade Account"));
+		Assert.assertTrue(trade.getAccount().equals("trade Account"));
 
 		// Update
 		trade.setAccount("Trade Account Update");

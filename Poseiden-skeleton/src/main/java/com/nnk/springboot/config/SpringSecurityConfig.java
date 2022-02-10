@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -26,23 +31,28 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/app/home").permitAll()
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/bidList/**").authenticated()
-                .antMatchers("/curvePoint/**").authenticated()
-                .antMatchers("/rating/**").authenticated()
-                .antMatchers("/ruleName/**").authenticated()
-                .antMatchers("/trade/**").authenticated()
-                .antMatchers("/bidList/update").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/curvePoint/update").hasRole("ADMIN")
-                .antMatchers("/rating/update").hasRole("ADMIN")
-                .antMatchers("/ruleName/update").hasRole("ADMIN")
-                .antMatchers("/trade/update").hasRole("ADMIN")
-                .antMatchers("/user/update").hasRole("ADMIN")
+                .antMatchers("/user/add").permitAll()
+                .antMatchers("/admin/home").hasAnyAuthority("ADMIN")
+                .antMatchers("/user/list").hasAnyAuthority("ADMIN")
+                .antMatchers("/app/secure/article-details").hasAnyAuthority("ADMIN")
+                .antMatchers("/bidList/update/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/bidList/delete/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/curvePoint/update/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/curvePoint/delete/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/rating/update/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/rating/delete/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/ruleName/update/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/ruleName/delete/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/trade/update/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/trade/delete/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/user/update/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers("/user/delete/{id}").hasAnyAuthority("ADMIN")
+
 
 
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/bidList/list").failureUrl("/403")
+                .loginPage("/login").defaultSuccessUrl("/bidList/list").failureUrl("/")
                 .usernameParameter("userName")
                 .passwordParameter("password")
                 .and().logout().deleteCookies("JSESSIONID").logoutUrl("/app-logout").logoutSuccessUrl("/")

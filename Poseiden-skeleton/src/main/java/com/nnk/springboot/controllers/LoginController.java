@@ -5,14 +5,10 @@ import com.nnk.springboot.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.security.RolesAllowed;
 
 @Controller
 @RequestMapping("app")
@@ -24,7 +20,7 @@ public class LoginController {
 
     private final static Logger logger = LogManager.getLogger("LoginController");
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public ModelAndView login() {
             logger.info("login");
             ModelAndView mav = new ModelAndView();
@@ -32,8 +28,7 @@ public class LoginController {
             return mav;
     }
 
-    @Secured("ROLE_ADMIN")
-    @GetMapping("secure/article-details")
+    @GetMapping("/secure/article-details")
     public ModelAndView getAllUserArticles() {
         logger.info("getAllUserArticles");
         ModelAndView mav = new ModelAndView();
@@ -42,13 +37,13 @@ public class LoginController {
         return mav;
     }
 
-    @GetMapping("error")
+    @GetMapping("/error")
     public ModelAndView error() {
         logger.info("error 403 message");
         ModelAndView mav = new ModelAndView();
         String errorMessage= "You are not authorized for the requested data.";
         mav.addObject("errorMsg", errorMessage);
-        mav.setViewName("403");
+        mav.setViewName("error/403");
         return mav;
     }
 }

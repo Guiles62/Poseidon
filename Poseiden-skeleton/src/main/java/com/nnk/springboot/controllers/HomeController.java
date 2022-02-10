@@ -24,7 +24,6 @@ public class HomeController {
 		return "home";
 	}
 
-	@RolesAllowed("ADMIN")
 	@RequestMapping("/admin/home")
 	public String adminHome(Model model) {
 		try {
