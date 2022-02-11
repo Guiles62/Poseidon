@@ -33,7 +33,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui",authorities = "ADMIN")
     public void getAllUserArticlesTest() throws Exception {
         mockMvc.perform(get("/app/secure/article-details")).andExpect(status().isOk());
     }

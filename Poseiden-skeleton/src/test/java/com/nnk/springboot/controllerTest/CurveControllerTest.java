@@ -15,9 +15,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -41,6 +43,7 @@ public class CurveControllerTest {
 
     private Model model;
     private CurvePoint curvePoint;
+    private BindingResult result;
 
     @BeforeEach
     void setup() {
@@ -74,13 +77,17 @@ public class CurveControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        mockMvc.perform(get("/curvePoint/update/1")).andExpect(status().isOk());
+        when(curveService.getCurvePointById(1)).thenReturn(Optional.ofNullable(curvePoint));
+        curveController.showUpdateForm(1,model);
+        assertEquals(curvePoint,curveController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void updateCurvePointTest() throws Exception {
-        mockMvc.perform(post("/curvePoint/update/1")).andExpect(status().isOk());
+        when(curveService.updateCurvePoint(1,curvePoint)).thenReturn(curvePoint);
+        curveController.updateCurvePoint(1,curvePoint,result,model);
+        assertEquals(curvePoint, curveController.updateCurvePoint(1,curvePoint,result,model));
     }
 
     @Test

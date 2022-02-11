@@ -3,24 +3,30 @@ package com.nnk.springboot.controllerTest;
 import com.nnk.springboot.controllers.RatingController;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.services.RatingService;
+
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -29,30 +35,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RatingControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Mock
     RatingService ratingService;
 
-    @Autowired
+    @Mock
     RatingController ratingController;
 
     private Rating rating;
-    private List<Rating>ratingList = new ArrayList<>();
     private Model model;
+    private List<Rating> ratingList = new ArrayList<>();
+    private BindingResult result;
 
     @BeforeEach
     void setup() {
         rating = new Rating();
         rating.setId(1);
-        rating.setFitchRating("fitch");
-        rating.setMoodysRating("moodys");
-        rating.setOrderNumber(1);
-        rating.setSandPRating("sand");
         ratingList.add(rating);
         when(ratingService.getRatingList()).thenReturn(ratingList);
-        when(ratingService.updateRating(1,rating)).thenReturn(rating);
-        when(ratingService.saveRating(rating)).thenReturn(rating);
+
     }
 
     @Test
@@ -70,25 +72,27 @@ public class RatingControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        mockMvc.perform(post("/rating/validate")).andExpect(status().isOk());
+        mockMvc.perform(post("/rating/validate")).andExpect(status().isFound());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        mockMvc.perform(get("/rating/update/1")).andExpect(status().isOk());
+        when(ratingService.findById(1)).thenReturn(Optional.ofNullable(rating));
+        ratingController.showUpdateForm(1,model);
+        assertEquals(rating,ratingController.showUpdateForm(1,model));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui",authorities = "ADMIN")
     public void updateRatingTest() throws Exception {
-        mockMvc.perform(post("/rating/update/1")).andExpect(status().isOk());
+        mockMvc.perform(post("/rating/update/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/rating/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = "ADMIN")
     public void deleteRatingTest() throws Exception {
-        mockMvc.perform(get("/rating/delete/1")).andExpect(status().isOk());
+        mockMvc.perform(get("/rating/delete/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/rating/list"));
     }
 
 }

@@ -17,11 +17,13 @@ import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.same;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -35,7 +37,7 @@ public class TradeControllerTest {
     @Mock
     TradeService tradeService;
 
-    @Autowired
+    @Mock
     TradeController tradeController;
 
     private Trade trade;
@@ -46,6 +48,7 @@ public class TradeControllerTest {
     void setup() {
         trade.setTradeId(1);
         tradeList.add(trade);
+        when(tradeService.saveTrade(trade)).thenReturn((trade));
         when(tradeService.getTradeList()).thenReturn(tradeList);
     }
 
@@ -70,18 +73,21 @@ public class TradeControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        mockMvc.perform(get("/trade/update/1")).andExpect(status().isOk());
+        when(tradeService.findById(1)).thenReturn(Optional.ofNullable(trade));
+        tradeController.showUpdateForm(1,model);
+        assertEquals(trade,tradeController.showUpdateForm(1,model));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui",authorities = "ADMIN")
     public void updateTradeTest() throws Exception {
-        mockMvc.perform(post("/trade/update/1")).andExpect(status().isOk());
+        mockMvc.perform(post("/trade/update/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/trade/list"));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void deleteTradeTest() throws Exception {
-        mockMvc.perform(get("/trade/delete/1")).andExpect(status().isOk());
+        tradeController.deleteTrade(1,model);
+        assertEquals(0, tradeService.getTradeList().size());
     }
 }

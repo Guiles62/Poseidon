@@ -3,8 +3,6 @@ package com.nnk.springboot.controllerTest;
 
 import com.nnk.springboot.controllers.BidListController;
 import com.nnk.springboot.domain.BidList;
-
-import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.services.BidListService;
 
 import org.junit.Test;
@@ -19,13 +17,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,18 +41,19 @@ public class BidListControllerTest {
     @Mock
     BidListService bidListService;
 
-
+    @Mock
     BidListController bidListController;
-
 
     private BidList bid;
     private List<BidList> bidLists = new ArrayList<>();
     private Model model;
+    private BindingResult result;
 
     @BeforeEach
     public void setup() {
-        bidListController = new BidListController(bidListService);
+        bid = new BidList();
         bid.setBidListId(1);
+        bidListController = new BidListController(bidListService);
         bidLists.add(bid);
         when(bidListService.getBidList()).thenReturn(bidLists);
 
@@ -60,7 +61,7 @@ public class BidListControllerTest {
 
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = "ADMIN")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/bidList/list")).andExpect(status().isOk());
     }
@@ -79,15 +80,18 @@ public class BidListControllerTest {
 
     @Test
     @WithMockUser(username = "gui")
-    public void showUpdateFormTest() throws Exception {
-        when(bidListService.getBidList()).thenReturn(bidLists);
-        mockMvc.perform(get("/bidList/update/1")).andExpect(status().isOk());
+        public void showUpdateFormTest() throws Exception {
+        when(bidListService.findById(1)).thenReturn(Optional.ofNullable(bid));
+        bidListController.showUpdateForm(1,model);
+        assertEquals(bid,bidListController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void updateBidTest() throws Exception {
-        mockMvc.perform(post("/bidList/update/1")).andExpect(status().isOk());
+        when(bidListService.updateBid(1,bid)).thenReturn(bid);
+        bidListController.updateBid(1,bid,result,model);
+        assertEquals(bid,bidListController.updateBid(1,bid,result,model));
     }
 
     @Test
