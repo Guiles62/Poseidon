@@ -8,10 +8,12 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -40,9 +42,10 @@ public class RatingControllerTest {
     @Mock
     RatingService ratingService;
 
-    @Mock
+    @Autowired
     RatingController ratingController;
 
+    @InjectMocks
     private Rating rating;
     private Model model;
     private List<Rating> ratingList = new ArrayList<>();
@@ -50,11 +53,11 @@ public class RatingControllerTest {
 
     @BeforeEach
     void setup() {
-        rating = new Rating();
-        rating.setId(1);
+        rating.setMoodysRating("moodys");
+        rating.setFitchRating("fitch");
+        rating.setOrderNumber(1);
         ratingList.add(rating);
         when(ratingService.getRatingList()).thenReturn(ratingList);
-
     }
 
     @Test
@@ -72,6 +75,7 @@ public class RatingControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
+        when(ratingService.saveRating(rating)).thenReturn(rating);
         mockMvc.perform(post("/rating/validate")).andExpect(status().isFound());
     }
 
@@ -84,15 +88,18 @@ public class RatingControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "gui",authorities = "ADMIN")
+    @WithMockUser(username = "gui")
     public void updateRatingTest() throws Exception {
-        mockMvc.perform(post("/rating/update/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/rating/list"));
+        when(ratingService.updateRating(1,rating)).thenReturn(rating);
+        ratingController.updateRating(1,rating,result,model);
+        assertEquals(rating, ratingController.updateRating(1,rating,result,model));
     }
 
     @Test
     @WithMockUser(username = "gui", authorities = "ADMIN")
     public void deleteRatingTest() throws Exception {
-        mockMvc.perform(get("/rating/delete/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/rating/list"));
+        ratingController.deleteRating(1,model);
+        assertEquals(0, ratingService.getRatingList().size());
     }
 
 }

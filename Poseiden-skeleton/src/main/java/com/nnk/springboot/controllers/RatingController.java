@@ -21,7 +21,12 @@ public class RatingController {
     @Autowired
     RatingService ratingService;
 
+    public RatingController(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
+
     private final static Logger logger = LogManager.getLogger("RatingController");
+
 
     @RequestMapping("/rating/list")
     public String home(Model model) {

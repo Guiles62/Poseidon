@@ -75,6 +75,7 @@ public class BidListControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
+        when(bidListService.saveBid(bid)).thenReturn(bid);
         mockMvc.perform(post("/bidList/validate")).andExpect(status().isOk());
     }
 
