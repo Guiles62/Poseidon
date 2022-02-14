@@ -18,6 +18,10 @@ public class BidListService {
     @Autowired
     BidListRepository bidListRepository;
 
+    public BidListService(BidListRepository bidListRepository) {
+        this.bidListRepository = bidListRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("BidListService");
 
     public List<BidList> getBidList () {
