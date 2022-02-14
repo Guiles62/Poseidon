@@ -6,6 +6,7 @@ import com.nnk.springboot.services.RuleNameService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,11 +40,13 @@ public class RuleNameControllerTest {
     @Mock
     RuleNameService ruleNameService;
 
-    @Mock
+    @Autowired
     RuleNameController ruleNameController;
 
+    @InjectMocks
     private RuleName ruleName;
     private Model model;
+    private BindingResult result;
 
 
 
@@ -70,26 +74,24 @@ public class RuleNameControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        mockMvc.perform(post("/ruleName/validate")).andExpect(status().isFound()).andExpect(redirectedUrl("/ruleName/list"));
+        assertEquals("ruleName/add", ruleNameController.validate(ruleName,result,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        when(ruleNameService.findById(1)).thenReturn(Optional.ofNullable(ruleName));
-        ruleNameController.showUpdateForm(1,model);
-        assertEquals(ruleName,ruleNameController.showUpdateForm(1,model));
+        assertEquals("ruleName/update",ruleNameController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui", authorities = "ADMIN")
     public void updateRuleNameTest() throws Exception {
-        mockMvc.perform(post("/ruleName/update/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/ruleName/list"));
+        assertEquals("redirect:/ruleName/list",ruleNameController.updateRuleName(1,ruleName,result,model));
     }
 
     @Test
     @WithMockUser(username = "gui", authorities = "ADMIN")
     public void deleteRuleNameTest() throws Exception {
-        mockMvc.perform(get("/ruleName/delete/1")).andExpect(status().isFound()).andExpect(redirectedUrl("/ruleName/list"));
+        assertEquals("redirect:/ruleName/list",ruleNameController.deleteRuleName(1,model));
     }
 }

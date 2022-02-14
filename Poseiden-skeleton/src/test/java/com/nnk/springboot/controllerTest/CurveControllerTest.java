@@ -7,6 +7,7 @@ import com.nnk.springboot.services.CurveService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,13 +36,14 @@ public class CurveControllerTest {
     @Mock
     CurveService curveService;
 
-    @Mock
+    @Autowired
     CurveController curveController;
 
     @Autowired
     MockMvc mockMvc;
 
     private Model model;
+    @InjectMocks
     private CurvePoint curvePoint;
     private BindingResult result;
 
@@ -77,17 +79,13 @@ public class CurveControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        when(curveService.getCurvePointById(1)).thenReturn(Optional.ofNullable(curvePoint));
-        curveController.showUpdateForm(1,model);
-        assertEquals(curvePoint,curveController.showUpdateForm(1,model));
+        assertEquals("curvePoint/update",curveController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void updateCurvePointTest() throws Exception {
-        when(curveService.updateCurvePoint(1,curvePoint)).thenReturn(curvePoint);
-        curveController.updateCurvePoint(1,curvePoint,result,model);
-        assertEquals(curvePoint, curveController.updateCurvePoint(1,curvePoint,result,model));
+        assertEquals("redirect:/curvePoint/list", curveController.updateCurvePoint(1,curvePoint,result,model));
     }
 
     @Test

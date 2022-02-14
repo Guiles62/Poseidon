@@ -41,7 +41,7 @@ public class BidListControllerTest {
     @Mock
     BidListService bidListService;
 
-    @Mock
+    @Autowired
     BidListController bidListController;
 
     private BidList bid;
@@ -82,17 +82,13 @@ public class BidListControllerTest {
     @Test
     @WithMockUser(username = "gui")
         public void showUpdateFormTest() throws Exception {
-        when(bidListService.findById(1)).thenReturn(Optional.ofNullable(bid));
-        bidListController.showUpdateForm(1,model);
-        assertEquals(bid,bidListController.showUpdateForm(1,model));
+        assertEquals("bidList/update",bidListController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void updateBidTest() throws Exception {
-        when(bidListService.updateBid(1,bid)).thenReturn(bid);
-        bidListController.updateBid(1,bid,result,model);
-        assertEquals(bid,bidListController.updateBid(1,bid,result,model));
+        assertEquals("redirect:/bidList/list",bidListController.updateBid(1,bid,result,model));
     }
 
     @Test

@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class HomeControllerTest {
 
-    @Mock
-    HomeController homeController = new HomeController();
+    @Autowired
+    HomeController homeController;
 
     @Autowired
     private MockMvc mockMvc;

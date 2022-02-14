@@ -6,6 +6,7 @@ import com.nnk.springboot.services.UserService;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,9 +38,10 @@ public class UserControllerTest {
     @Mock
     UserService userService;
 
-    @Mock
+    @Autowired
     UserController userController;
 
+    @InjectMocks
     private User user;
     private Model model;
     private BindingResult result;
@@ -56,41 +58,36 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void homeTest() throws Exception {
-        mockMvc.perform(get("/user/list")).andExpect(status().isOk());
+        assertEquals("user/list", userController.home(model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void addUserTest() throws Exception {
-        mockMvc.perform(get("/user/add")).andExpect(status().isOk());
+        assertEquals("user/add", userController.addUser(user));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        mockMvc.perform(post("/user/validate")).andExpect(status().isOk());
+        assertEquals("user/add", userController.validate(user,result,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void showUpdateFormTest() throws Exception {
-        when(userService.findById(1)).thenReturn(Optional.ofNullable(user));
-        userController.showUpdateForm(1,model);
-        assertEquals(user,userController.showUpdateForm(1,model));
+        assertEquals("user/update",userController.showUpdateForm(1,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void updateUserTest() throws Exception {
-        when(userService.updateUser(1,user)).thenReturn(user);
-        userController.updateUser(1,user,result,model);
-        assertEquals(user,userController.updateUser(1,user,result,model));
+        assertEquals("redirect:/user/list",userController.updateUser(1,user,result,model));
     }
 
     @Test
     @WithMockUser(username = "gui")
-    public void deleteUserTest() throws Exception {
-        userController.deleteUser(40,model);
-        assertEquals(0,userService.getUserList().size());
+    public void deleteUserTest() throws Exception {;
+        assertEquals("redirect:/user/list", userController.deleteUser(1,model));
     }
 }
