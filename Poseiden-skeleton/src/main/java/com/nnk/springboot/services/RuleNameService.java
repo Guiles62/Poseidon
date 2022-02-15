@@ -16,6 +16,10 @@ public class RuleNameService {
     @Autowired
     RuleNameRepository ruleNameRepository;
 
+    public RuleNameService(RuleNameRepository ruleNameRepository) {
+        this.ruleNameRepository = ruleNameRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("RuleNameService");
 
     public List<RuleName> getRuleNameList() {

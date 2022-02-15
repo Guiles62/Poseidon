@@ -22,6 +22,10 @@ public class CurveService {
     @Autowired
     CurvePointRepository curvePointRepository;
 
+    public CurveService(CurvePointRepository curvePointRepository) {
+        this.curvePointRepository = curvePointRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("CurveService");
 
     public List<CurvePoint> getCurvePointList () {

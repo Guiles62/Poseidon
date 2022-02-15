@@ -3,6 +3,7 @@ package com.nnk.springboot.serviceTest;
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.services.BidListService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -32,15 +33,24 @@ public class BidListServiceTest {
 
     @InjectMocks
     private BidList bid;
+
     List<BidList> bidListList = new ArrayList<>();
 
-    @BeforeEach
-    void setup() {
+
+    @Before
+    public void setup() {
+        bid = new BidList();
+        bid.setAccount("account Test");
+        bid.setType("type Test");
+        bid.setBidQuantity(10d);
+        bid.setBidListId(1);
+        when(bidListRepository.findAll()).thenReturn(bidListList);
         bidListService = new BidListService(bidListRepository);
+
     }
 
     @Test
-    @WithMockUser("gui")
+    @WithMockUser(username = "gui")
     public void getBidListTest() {
         when(bidListRepository.findAll()).thenReturn(bidListList);
         assertEquals(0,bidListService.getBidList().size());
@@ -49,20 +59,35 @@ public class BidListServiceTest {
     @Test
     @WithMockUser(username = "gui")
     public void saveBidTest() {
-        bid.setAccount("account Test");
-        bid.setType("type Test");
-        bid.setBidQuantity(10d);
-        bid.setBidListId(1);
+        when(bidListRepository.save(bid)).thenReturn(bid);
         bidListService.saveBid(bid);
-        verify(bidListRepository,times(1)).save(any(BidList.class));
+        assertEquals(bid, bidListRepository.save(bid));
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void findByIdTest() {
-        int id = 1;
-        when(bidListRepository.findById(id)).thenReturn(Optional.ofNullable(bid));
+        bid.setBidListId(1);
+        when(bidListRepository.findById(1)).thenReturn(Optional.ofNullable(bid));
         bidListService.findById(1);
-        verify(bidListRepository,times(1)).findById(id);
+        verify(bidListRepository,times(1)).findById(1);
     }
+
+    @Test
+    @WithMockUser(username = "gui")
+    public void updateBidTest() {
+        when(bidListRepository.save(bid)).thenReturn(bid);
+        when(bidListRepository.findById(1)).thenReturn(Optional.ofNullable(bid));
+        bid.setType( "type test bis");
+        bidListService.updateBid(1,bid);
+        verify(bidListRepository,times(1)).save(bid);
+    }
+
+    @Test
+    @WithMockUser(username = "gui")
+    public void deleteBidTest() {
+        bidListService.deleteBid(bid);
+        verify(bidListRepository,times(1)).delete(bid);
+    }
+
 }

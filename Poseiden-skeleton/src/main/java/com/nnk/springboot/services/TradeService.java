@@ -17,6 +17,10 @@ public class TradeService {
     @Autowired
     TradeRepository tradeRepository;
 
+    public TradeService(TradeRepository tradeRepository) {
+        this.tradeRepository = tradeRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("TradeService");
 
     public List<Trade> getTradeList() {

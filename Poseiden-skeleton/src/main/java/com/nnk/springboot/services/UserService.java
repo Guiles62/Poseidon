@@ -22,6 +22,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("UserService");
 
     public List<User> getUserList() {

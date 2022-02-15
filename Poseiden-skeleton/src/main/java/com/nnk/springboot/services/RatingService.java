@@ -16,6 +16,10 @@ public class RatingService {
     @Autowired
     RatingRepository ratingRepository;
 
+    public RatingService(RatingRepository ratingRepository) {
+        this.ratingRepository = ratingRepository;
+    }
+
     private final static Logger logger = LogManager.getLogger("RatingService");
 
     public List<Rating> getRatingList() {
