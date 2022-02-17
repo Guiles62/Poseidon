@@ -53,17 +53,17 @@ public class LoginController {
         return mav;
     }
 
-    @GetMapping("/error")
-    public ModelAndView error() {
+    @GetMapping("/*")
+    public String error (Principal principal, Model model) {
         logger.info("error 403 message");
-        ModelAndView mav = new ModelAndView();
         String errorMessage= "You are not authorized for the requested data.";
-        mav.addObject("errorMsg", errorMessage);
-        mav.setViewName("error/403");
-        return mav;
+        model.addAttribute("errorMsg", errorMessage);
+        String userInfo = getUserInfo(principal);
+        model.addAttribute("principal", userInfo);
+
+        return "/error/403";
     }
 
-    @RequestMapping("/*")
     public String getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
 
@@ -75,20 +75,22 @@ public class LoginController {
         return userInfo.toString();
     }
 
-    private StringBuffer getOauth2LoginInfo(Principal user) {
+
+    public StringBuffer getOauth2LoginInfo(Principal user) {
         StringBuffer protectedInfo = new StringBuffer();
+
         OAuth2AuthenticationToken authToken = ((OAuth2AuthenticationToken) user);
         OAuth2AuthorizedClient authClient = this.oAuth2AuthorizedClientService.loadAuthorizedClient(authToken.getAuthorizedClientRegistrationId(), authToken.getName());
 
         Map<String, Object> userDetails = ((DefaultOAuth2User) authToken.getPrincipal()).getAttributes();
 
         String userToken = authClient.getAccessToken().getTokenValue();
-        protectedInfo.append(userDetails.get("name"));
+        protectedInfo.append(userDetails.get("login"));
 
         return protectedInfo;
     }
 
-    private StringBuffer getUsernamePasswordLoginInfo(Principal user) {
+    public StringBuffer getUsernamePasswordLoginInfo(Principal user) {
         StringBuffer usernameInfo = new StringBuffer();
         UsernamePasswordAuthenticationToken token = ((UsernamePasswordAuthenticationToken) user);
 

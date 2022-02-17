@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class TradeController {
@@ -22,14 +23,19 @@ public class TradeController {
     @Autowired
     TradeService tradeService;
 
+    @Autowired
+    LoginController loginController;
+
     private final static Logger logger = LogManager.getLogger("TradeController");
 
     @RequestMapping("/trade/list")
-    public String home(Model model) {
+    public String home(Principal principal, Model model) {
         // TODO: find all Trade, add to model
         try {
             logger.info("home");
             model.addAttribute("trades", tradeService.getTradeList());
+            String userInfo = loginController.getUserInfo(principal);
+            model.addAttribute("principal", userInfo);
         } catch (Exception ex) {
             logger.error("home error");
         }

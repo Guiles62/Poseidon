@@ -1,16 +1,10 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.BidListService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +27,7 @@ public class BidListController {
     @Autowired
     LoginController loginController;
 
+
     public BidListController(BidListService bidListService) {
         this.bidListService = bidListService;
     }
@@ -41,11 +36,14 @@ public class BidListController {
 
 
     @RequestMapping("/bidList/list")
-    public String home(Model model) {
+    public String home(Principal principal,Model model) {
         // TODO: call service find all bids to show to the view
         try {
             logger.info("home");
             model.addAttribute("bidList", bidListService.getBidList());
+            String userInfo = loginController.getUserInfo(principal);
+            model.addAttribute("principal", userInfo);
+
         } catch (Exception ex) {
             logger.error("home error");
         }

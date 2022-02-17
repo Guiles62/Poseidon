@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Controller
@@ -22,14 +23,19 @@ public class CurveController {
     @Autowired
     CurveService curveService;
 
+    @Autowired
+    LoginController loginController;
+
     private final static Logger logger = LogManager.getLogger("CurveController");
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model) {
+    public String home(Principal principal, Model model) {
         // TODO: find all Curve Point, add to model
         try {
             logger.info("home");
             model.addAttribute("curvePoints", curveService.getCurvePointList());
+            String userInfo = loginController.getUserInfo(principal);
+            model.addAttribute("principal", userInfo);
         }catch (Exception ex) {
             logger.error("home error");
         }

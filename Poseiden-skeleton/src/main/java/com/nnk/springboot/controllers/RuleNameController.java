@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class RuleNameController {
@@ -22,14 +23,19 @@ public class RuleNameController {
     @Autowired
     RuleNameService ruleNameService;
 
+    @Autowired
+    LoginController loginController;
+
     private final static Logger logger = LogManager.getLogger("RuleNameController");
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model) {
+    public String home(Principal principal, Model model) {
         // TODO: find all RuleName, add to model
         try {
             logger.info("home");
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
+            String userInfo = loginController.getUserInfo(principal);
+            model.addAttribute("principal", userInfo);
         } catch (Exception ex) {
             logger.error("home error");
         }

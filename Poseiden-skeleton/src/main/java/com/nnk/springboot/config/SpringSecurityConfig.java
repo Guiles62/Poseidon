@@ -47,6 +47,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/trade/delete/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers("/user/update/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/user/delete/{id}").hasAnyAuthority("ADMIN")
+                .and()
+                .exceptionHandling().accessDeniedPage("/app/error")
+
 
 
 
