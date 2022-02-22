@@ -12,6 +12,7 @@ public class HomeController {
 
 	private final static Logger logger = LogManager.getLogger("HomeController");
 
+	// call the home page for user as USER and ADMIN authorities
 	@RequestMapping("/")
 	public String home(Model model)
 	{
@@ -23,6 +24,7 @@ public class HomeController {
 		return "home";
 	}
 
+	// call the home page for user as ADMIN authorities and redirect to the bidList/list html page
 	@RequestMapping("/admin/home")
 	public String adminHome(Model model) {
 		try {

@@ -36,6 +36,7 @@ public class LoginController {
         this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
     }
 
+    // call the login html
     @GetMapping("/login")
     public ModelAndView login() {
             logger.info("login");
@@ -44,6 +45,7 @@ public class LoginController {
             return mav;
     }
 
+    // call the userList html
     @GetMapping("/secure/article-details")
     public ModelAndView getAllUserArticles() {
         logger.info("getAllUserArticles");
@@ -53,6 +55,7 @@ public class LoginController {
         return mav;
     }
 
+    // call error 403 html
     @GetMapping("/*")
     public String error (Principal principal, Model model) {
         logger.info("error 403 message");
@@ -64,6 +67,7 @@ public class LoginController {
         return "/error/403";
     }
 
+    // retrieves logged in user data as text
     public String getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
 
@@ -75,7 +79,7 @@ public class LoginController {
         return userInfo.toString();
     }
 
-
+    // retrieves the logged in user's login from the Github token
     public StringBuffer getOauth2LoginInfo(Principal user) {
         StringBuffer protectedInfo = new StringBuffer();
 
@@ -90,6 +94,7 @@ public class LoginController {
         return protectedInfo;
     }
 
+    // retrieve logged in user data from application
     public StringBuffer getUsernamePasswordLoginInfo(Principal user) {
         StringBuffer usernameInfo = new StringBuffer();
         UsernamePasswordAuthenticationToken token = ((UsernamePasswordAuthenticationToken) user);

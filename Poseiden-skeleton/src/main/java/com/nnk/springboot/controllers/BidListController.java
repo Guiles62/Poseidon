@@ -34,10 +34,10 @@ public class BidListController {
 
     private final static Logger logger = LogManager.getLogger("BidListController");
 
-
+    // call the BidList html page
     @RequestMapping("/bidList/list")
     public String home(Principal principal,Model model) {
-        // TODO: call service find all bids to show to the view
+        // call service find all bids to show to the view and get userInfo, add to model
         try {
             logger.info("home");
             model.addAttribute("bidList", bidListService.getBidList());
@@ -50,6 +50,7 @@ public class BidListController {
         return "bidList/list";
     }
 
+    // call the html page to add a bid
     @GetMapping("/bidList/add")
     public String addBidForm(BidList bid) {
         try {
@@ -60,9 +61,10 @@ public class BidListController {
         return "bidList/add";
     }
 
+    // pass the view information to the controller in order to add a bid
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
+        // check data valid and save to db, after saving return bid list
         try {
             logger.info("validate");
             if (!result.hasErrors()) {
@@ -76,9 +78,10 @@ public class BidListController {
         return "bidList/add";
     }
 
+    // call the html page to update a bid by Id
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
+        // get Bid by Id and to model then show to the form
         try {
             logger.info("showUpdateFrom");
             BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
@@ -89,10 +92,11 @@ public class BidListController {
         return "bidList/update";
     }
 
+    // pass the view information to the controller in order to update a bid
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
+        // check required fields, if valid call service to update Bid and return list Bid
         try {
             logger.info("updateBid");
             if (result.hasErrors()) {
@@ -106,9 +110,10 @@ public class BidListController {
         return "redirect:/bidList/list";
     }
 
+    // call the html page to delete a bid by Id
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
+        // Find Bid by Id and delete the bid, return to Bid list
         try {
             logger.info("deleteBid");
             BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));

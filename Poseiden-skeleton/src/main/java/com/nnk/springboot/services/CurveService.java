@@ -28,6 +28,7 @@ public class CurveService {
 
     private final static Logger logger = LogManager.getLogger("CurveService");
 
+    // call repository to find all curvePoint
     public List<CurvePoint> getCurvePointList () {
        try {
            logger.info("getCurvePointList");
@@ -37,6 +38,7 @@ public class CurveService {
         return curvePointRepository.findAll();
     }
 
+    // call repository to save a curvePoint
     public CurvePoint saveCurvePoint (CurvePoint curvePoint) {
         try {
             logger.info("saveCurvePoint");
@@ -48,6 +50,7 @@ public class CurveService {
         return curvePointRepository.save(curvePoint);
     }
 
+    // call repository to find a curvePoint by Id
     public Optional<CurvePoint> getCurvePointById(int id) {
         try {
             logger.info("getCurvePointById");
@@ -57,6 +60,7 @@ public class CurveService {
         return curvePointRepository.findById(id);
     }
 
+    // call repository to update a curvePoint by Id
     public CurvePoint updateCurvePoint(int id, CurvePoint curvePoint) {
             CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
         try {
@@ -72,6 +76,7 @@ public class CurveService {
             return curvePointRepository.save(curve);
     }
 
+    // call repository to delete a curvePoint
     public void delete(CurvePoint curvePoint) {
         try {
             logger.info("delete");

@@ -24,6 +24,7 @@ public class BidListService {
 
     private final static Logger logger = LogManager.getLogger("BidListService");
 
+    // call repository to find all Bid
     public List<BidList> getBidList () {
         try {
             logger.info("getBidList");
@@ -33,6 +34,7 @@ public class BidListService {
       return bidListRepository.findAll();
     }
 
+    // call repository to save a Bid
     public BidList saveBid(BidList bid) {
         try {
             logger.info("saveBid");
@@ -46,6 +48,7 @@ public class BidListService {
         return bidListRepository.save(bid);
     }
 
+    // call repository to find a Bid by Id
     public Optional<BidList> findById(int id) {
         try {
             logger.info("findById");
@@ -55,6 +58,7 @@ public class BidListService {
         return bidListRepository.findById(id);
     }
 
+    // call repository to update a Bid by Id
     public BidList updateBid (int id, BidList bidList) {
             BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
             try {
@@ -87,6 +91,7 @@ public class BidListService {
         return bidListRepository.save(bid);
     }
 
+    // call repository to delete a Bid
     public void deleteBid(BidList bid) {
         try {
             logger.info("deleteBid");

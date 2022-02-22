@@ -28,9 +28,10 @@ public class CurveController {
 
     private final static Logger logger = LogManager.getLogger("CurveController");
 
+    // call the curvePoint list html page
     @RequestMapping("/curvePoint/list")
     public String home(Principal principal, Model model) {
-        // TODO: find all Curve Point, add to model
+        // find all Curve Point and userInfo, add to model
         try {
             logger.info("home");
             model.addAttribute("curvePoints", curveService.getCurvePointList());
@@ -42,6 +43,7 @@ public class CurveController {
         return "curvePoint/list";
     }
 
+    // call the html page to add a curvePoint
     @GetMapping("/curvePoint/add")
     public String addCurvePointForm(CurvePoint curvePoint) {
         try {
@@ -52,9 +54,10 @@ public class CurveController {
         return "curvePoint/add";
     }
 
+    // pass the view information to the controller in order to add a curvePoint
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
+        // check data valid and save to db, after saving return Curve list
         try {
             logger.info("validate");
             if (!result.hasErrors()) {
@@ -68,9 +71,10 @@ public class CurveController {
         return "curvePoint/add";
     }
 
+    // call the html page to update a curvePoint by Id
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get CurvePoint by Id and to model then show to the form
+        // get CurvePoint by Id and to model then show to the form
         try {
             logger.info("showUpdateForm");
             CurvePoint curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
@@ -81,10 +85,11 @@ public class CurveController {
         return "curvePoint/update";
     }
 
+    // pass the view information to the controller in order to update a curvePoint
     @PostMapping("/curvePoint/update/{id}")
     public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
+        // check required fields, if valid call service to update Curve and return Curve list
         try {
             logger.info("updateCurvePoint");
             if (result.hasErrors()) {
@@ -98,9 +103,10 @@ public class CurveController {
         return "redirect:/curvePoint/list";
     }
 
+    // call the html page to delete curvePoint by Id
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteCurvePoint(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
+        // Find Curve by Id and delete the Curve, return to Curve list
         try {
             logger.info("deleteCurvePoint");
             CurvePoint curvePoint1 = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));

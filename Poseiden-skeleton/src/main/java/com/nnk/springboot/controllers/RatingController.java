@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @Controller
 public class RatingController {
-    // TODO: Inject Rating service
+
     @Autowired
     RatingService ratingService;
 
@@ -32,9 +32,10 @@ public class RatingController {
     private final static Logger logger = LogManager.getLogger("RatingController");
 
 
+    // call the rating list html page
     @RequestMapping("/rating/list")
     public String home(Principal principal, Model model) {
-        // TODO: find all Rating, add to model
+        // find all Rating and get userInfo, add to model
         try {
             logger.info("home");
             model.addAttribute("ratings", ratingService.getRatingList());
@@ -46,6 +47,7 @@ public class RatingController {
         return "rating/list";
     }
 
+    // call the html page to add a rating
     @GetMapping("/rating/add")
     public String addRatingForm(Rating rating) {
         try {
@@ -56,9 +58,10 @@ public class RatingController {
         return "rating/add";
     }
 
+    // pass the view information to the controller in order to add a rating
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
+        // check data valid and save to db, after saving return Rating list
         try {
             logger.info("validate");
             if (!result.hasErrors()) {
@@ -72,9 +75,10 @@ public class RatingController {
         return "rating/add";
     }
 
+    // call the html page to update a rating by Id
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
+        // get Rating by Id and to model then show to the form
         try {
             logger.info("showUpdateForm");
             Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
@@ -85,10 +89,11 @@ public class RatingController {
         return "rating/update";
     }
 
+    // pass the view information to the controller in order to update a rating
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Rating and return Rating list
+        // check required fields, if valid call service to update Rating and return Rating list
         try {
             logger.info("updateRating");
             if (result.hasErrors()) {
@@ -102,9 +107,10 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    // call the html page to delete rating by Id
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Rating by Id and delete the Rating, return to Rating list
+        // Find Rating by Id and delete the Rating, return to Rating list
         try {
             logger.info("deleteRating");
             Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
