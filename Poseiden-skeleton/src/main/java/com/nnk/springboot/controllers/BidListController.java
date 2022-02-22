@@ -58,7 +58,7 @@ public class BidListController {
      */
     @RequestMapping("/bidList/list")
     public String home(Principal principal,Model model) {
-            logger.info("Get BidList to service and add to model");
+            logger.info("Get Bid List to service and add to model");
             model.addAttribute("bidList", bidListService.getBidList());
             String userInfo = loginController.getUserInfo(principal);
             model.addAttribute("principal", userInfo);
@@ -80,7 +80,7 @@ public class BidListController {
      * pass the view information to the controller in order to add a bid
      * check data valid and save to db, after saving return bid list
      * @param bid BidList to add
-     * @param result if BidList has error or not
+     * @param result if BidList pattern has error or not
      * @param model store information to use in the html page with Thymeleaf
      * @return /bidList/list if result ok
      * @return bidList/add if result ko
@@ -115,8 +115,8 @@ public class BidListController {
      * pass the view information to the controller in order to update a bid
      * check required fields, if valid call service to update Bid and return list Bid
      * @param id id of the Bid we want to update
-     * @param bidList BidList to update
-     * @param result if BidList has error or not
+     * @param bidList BidList to update with changes
+     * @param result if BidList pattern has error or not
      * @param model store information to use in the html page with Thymeleaf
      * @return bidList/update if result ko
      * @return /bidList/list if result ok
@@ -124,7 +124,7 @@ public class BidListController {
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-            logger.info("validate Bid sent to controller and call service to save it");
+            logger.info("validate Bid sent to controller and call service to update it");
             if (result.hasErrors()) {
                 return "bidList/update";
             }

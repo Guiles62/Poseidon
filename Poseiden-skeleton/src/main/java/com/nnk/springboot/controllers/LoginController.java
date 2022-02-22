@@ -20,6 +20,22 @@ import org.springframework.web.servlet.ModelAndView;
 import java.security.Principal;
 import java.util.Map;
 
+/**
+ * <b>LoginController is the class which call and receive data for and from user,login and error HTML pages</b>
+ * <p>
+ *     contain methods
+ *     <ul>
+ *         <li>login</li>
+ *         <li>getAllUserArticles</li>
+ *         <li>error</li>
+ *         <li>getUserInfo</li>
+ *         <li>getOauth2LoginInfo</li>
+ *         <li>getUsernamePasswordLoginInfo</li>
+ *     </ul>
+ * </p>
+ * @author Guillaume C
+ */
+
 @Controller
 @RequestMapping("app")
 public class LoginController {
@@ -36,29 +52,40 @@ public class LoginController {
         this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
     }
 
-    // call the login html
+    /**
+     * call the login html
+     * @return login HTML page
+     */
     @GetMapping("/login")
     public ModelAndView login() {
-            logger.info("login");
+            logger.info("Get the Login HTML page");
             ModelAndView mav = new ModelAndView();
             mav.setViewName("login");
             return mav;
     }
 
-    // call the userList html
+    /**
+     * call the userList html
+     * @return user/list HTML page
+     */
     @GetMapping("/secure/article-details")
     public ModelAndView getAllUserArticles() {
-        logger.info("getAllUserArticles");
+        logger.info("Get userList HTML page");
         ModelAndView mav = new ModelAndView();
         mav.addObject("users", userService.getUserList());
         mav.setViewName("user/list");
         return mav;
     }
 
-    // call error 403 html
+    /**
+     * call error 403 html
+     * @param principal is the connected user
+     * @param model store information to use in the html page with Thymeleaf
+     * @return /error/403 HTML page
+     */
     @GetMapping("/*")
     public String error (Principal principal, Model model) {
-        logger.info("error 403 message");
+        logger.info("Get error 403 message");
         String errorMessage= "You are not authorized for the requested data.";
         model.addAttribute("errorMsg", errorMessage);
         String userInfo = getUserInfo(principal);
@@ -67,7 +94,11 @@ public class LoginController {
         return "/error/403";
     }
 
-    // retrieves logged in user data as text
+    /**
+     * retrieves logged in user data as text
+     * @param user is the connected user
+     * @return user information token to String
+     */
     public String getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
 
@@ -79,7 +110,11 @@ public class LoginController {
         return userInfo.toString();
     }
 
-    // retrieves the logged in user's login from the Github token
+    /**
+     * retrieves the logged in user's login from the Github token
+     * @param user is the connected user
+     * @return user login token to string
+     */
     public StringBuffer getOauth2LoginInfo(Principal user) {
         StringBuffer protectedInfo = new StringBuffer();
 
@@ -94,7 +129,11 @@ public class LoginController {
         return protectedInfo;
     }
 
-    // retrieve logged in user data from application
+    /**
+     * retrieve logged in user data from application
+     * @param user is the connected user
+     * @return user userName token to string
+     */
     public StringBuffer getUsernamePasswordLoginInfo(Principal user) {
         StringBuffer usernameInfo = new StringBuffer();
         UsernamePasswordAuthenticationToken token = ((UsernamePasswordAuthenticationToken) user);

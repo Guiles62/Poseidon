@@ -17,6 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 import java.security.Principal;
 
+/**
+ * <b>RuleNameController is the class which call and receive data for and from ruleName HTML pages</b>
+ * <p>
+ *     contain methods
+ *     <ul>
+ *         <li>home</li>
+ *         <li>addRuleForm</li>
+ *         <li>validate</li>
+ *         <li>showUpdateForm</li>
+ *         <li>updateRuleName</li>
+ *         <li>deleteRuleName</li>
+ *     </ul>
+ * </p>
+ * @author Guillaume C
+ */
+
 @Controller
 public class RuleNameController {
 
@@ -28,29 +44,45 @@ public class RuleNameController {
 
     private final static Logger logger = LogManager.getLogger("RuleNameController");
 
-    // call ruleName list html page
+    /**
+     * call ruleName list html page
+     * find all RuleName and get userInfo, add to model
+     * @param principal is the connected user
+     * @param model store information to use in the html page with Thymeleaf
+     * @return ruleName/list HTML page
+     */
     @RequestMapping("/ruleName/list")
     public String home(Principal principal, Model model) {
-        // find all RuleName and get userInfo, add to model
-            logger.info("home");
+            logger.info("Get ruleName List to service and add to model");
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
             String userInfo = loginController.getUserInfo(principal);
             model.addAttribute("principal", userInfo);
         return "ruleName/list";
     }
 
-    // call the html page to add a ruleName
+    /**
+     * call the html page to add a ruleName
+     * @param ruleName domain we want to add
+     * @return ruleName/add HTML page
+     */
     @GetMapping("/ruleName/add")
     public String addRuleForm(RuleName ruleName) {
-            logger.info("addRuleForm");
+            logger.info("Get ruleName Form to add new RuleName");
         return "ruleName/add";
     }
 
-    // pass the view information to the controller in order to add a ruleName
+    /**
+     * pass the view information to the controller in order to add a ruleName
+     * check data valid and save to db, after saving return RuleName list
+     * @param ruleName RuleName to add
+     * @param result if RuleName pattern has error or not
+     * @param model store information to use in the html page with Thymeleaf
+     * @return /ruleName/list if result ok
+     * @return ruleName/add if result ko
+     */
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // check data valid and save to db, after saving return RuleName list
-            logger.info("validate");
+            logger.info("Validate ruleName send to controller and call service to save it");
             if (!result.hasErrors()) {
                 ruleNameService.saveRuleName(ruleName);
                 model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
@@ -59,23 +91,35 @@ public class RuleNameController {
         return "ruleName/add";
     }
 
-    // call the html page to update a ruleName by Id
+    /**
+     * call the html page to update a ruleName by Id
+     * get RuleName by Id and to model then show to the form
+     * @param id id of the ruleName we want to update
+     * @param model store information to use in the html page with Thymeleaf
+     * @return ruleName/update HTML page
+     */
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // get RuleName by Id and to model then show to the form
-            logger.info("showUpdateForm");
+            logger.info("Get the form to update ruleName");
             RuleName rule = ruleNameService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
             model.addAttribute("ruleName", rule);
         return "ruleName/update";
     }
 
-    // pass the view information to the controller in order to update a ruleName
+    /**
+     * pass the view information to the controller in order to update a ruleName
+     * check required fields, if valid call service to update RuleName and return RuleName list
+     * @param id id of the ruleName to update
+     * @param ruleName ruleName to update with changes
+     * @param result if RuleName pattern has error or not
+     * @param model store information to use in the html page with Thymeleaf
+     * @return ruleName/update if result ko
+     * @return /ruleName/list if result ok
+     */
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
-        // check required fields, if valid call service to update RuleName and return RuleName list
-
-            logger.info("updateRuleName");
+            logger.info("validate RuleName sent to controller and call service to update it");
             if (result.hasErrors()) {
                 return "ruleName/update";
             }
@@ -84,11 +128,16 @@ public class RuleNameController {
         return "redirect:/ruleName/list";
     }
 
-    // call the html page to delete ruleName by Id
+    /**
+     * call the html page to delete ruleName by Id
+     * Find RuleName by Id and delete the RuleName, return to Rule list
+     * @param id id of the ruleName to delete
+     * @param model store information to use in the html page with Thymeleaf
+     * @return /ruleName/list HTML page
+     */
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
-        // Find RuleName by Id and delete the RuleName, return to Rule list
-            logger.info("deleteRuleName");
+            logger.info("Call service to delete ruleName");
             RuleName ruleName = ruleNameService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
             ruleNameService.delete(ruleName);
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());

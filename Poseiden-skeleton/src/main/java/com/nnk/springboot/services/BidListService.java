@@ -12,6 +12,21 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * <b>BidListService is the class that calls the BidListRepository</b>
+ * <p>
+ *     contain methods
+ *     <ul>
+ *         <li>getBidList</li>
+ *         <li>saveBid</li>
+ *         <li>findById</li>
+ *         <li>updateBid</li>
+ *         <li>deleteBid</li>
+ *     </ul>
+ * </p>
+ * @author Guillaume C
+ */
+
 @Service
 public class BidListService {
 
@@ -24,15 +39,22 @@ public class BidListService {
 
     private final static Logger logger = LogManager.getLogger("BidListService");
 
-    // call repository to find all Bid
+    /**
+     * call repository to find all Bid
+     * @return the bid List
+     */
     public List<BidList> getBidList () {
-            logger.info("getBidList");
+            logger.info("Call repository to get BidList");
       return bidListRepository.findAll();
     }
 
-    // call repository to save a Bid
+    /**
+     * call repository to save a Bid
+     * @param bid Bid to save
+     * @return call repository to save Bid
+     */
     public BidList saveBid(BidList bid) {
-            logger.info("saveBid");
+            logger.info("call repository to save new Bid");
             Timestamp creationDate = new Timestamp(System.currentTimeMillis());
             Timestamp bidListDate = new Timestamp(bid.getBidListDate().getTime());
             bid.setCreationDate(creationDate);
@@ -40,16 +62,25 @@ public class BidListService {
         return bidListRepository.save(bid);
     }
 
-    // call repository to find a Bid by Id
+    /**
+     * call repository to find a Bid by Id
+     * @param id bid id to find
+     * @return bid find with id
+     */
     public Optional<BidList> findById(int id) {
-            logger.info("findById");
+            logger.info("Call repository to find Bid by id");
         return bidListRepository.findById(id);
     }
 
-    // call repository to update a Bid by Id
+    /**
+     * call repository to update a Bid by Id
+     * @param id id of the Bid to update
+     * @param bidList bidList to update with changes
+     * @return call the repository to save changes
+     */
     public BidList updateBid (int id, BidList bidList) {
             BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
-                logger.info("updateBid");
+                logger.info("Call repository to save Bid with changes");
                 Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
                 Timestamp bidListDate = new Timestamp(bid.getBidListDate().getTime());
                 bid.setAccount(bidList.getAccount());
@@ -75,9 +106,12 @@ public class BidListService {
         return bidListRepository.save(bid);
     }
 
-    // call repository to delete a Bid
+    /**
+     * call repository to delete a Bid
+     * @param bid bid to delete
+     */
     public void deleteBid(BidList bid) {
-            logger.info("deleteBid");
+            logger.info("Call repository to delete Bid");
         bidListRepository.delete(bid);
     }
 }

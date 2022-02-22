@@ -43,30 +43,45 @@ public class CurveController {
 
     private final static Logger logger = LogManager.getLogger("CurveController");
 
-    // call the curvePoint list html page
+    /**
+     * call the curvePoint list html page
+     * find all Curve Point and userInfo, add to model
+     * @param principal is the connected user
+     * @param model store information to use in the html page with Thymeleaf
+     * @return curvePoint/list HTML page
+     */
     @RequestMapping("/curvePoint/list")
     public String home(Principal principal, Model model) {
-        // find all Curve Point and userInfo, add to model
-
-            logger.info("home");
+            logger.info("get curvePoint list to service and add to model");
             model.addAttribute("curvePoints", curveService.getCurvePointList());
             String userInfo = loginController.getUserInfo(principal);
             model.addAttribute("principal", userInfo);
         return "curvePoint/list";
     }
 
-    // call the html page to add a curvePoint
+    /**
+     * call the html page to add a curvePoint
+     * @param curvePoint domain we want to add
+     * @return curvePoint/add HTML page
+     */
     @GetMapping("/curvePoint/add")
     public String addCurvePointForm(CurvePoint curvePoint) {
             logger.info("addCurvePointForm");
         return "curvePoint/add";
     }
 
-    // pass the view information to the controller in order to add a curvePoint
+    /**
+     * pass the view information to the controller in order to add a curvePoint
+     * check data valid and save to db, after saving return Curve list
+     * @param curvePoint curvePoint to add
+     * @param result if curvePoint pattern has error or not
+     * @param model store information to use in the html page with Thymeleaf
+     * @return /curvePoint/list HTML page if result ok
+     * @return curvePoint/add HTML page if result ko
+     */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // check data valid and save to db, after saving return Curve list
-            logger.info("validate");
+            logger.info("validate curvePoint sent to controller and call service to save it");
             if (!result.hasErrors()) {
                 curveService.saveCurvePoint(curvePoint);
                 model.addAttribute("curvePoints", curveService.getCurvePointList());
@@ -75,23 +90,35 @@ public class CurveController {
         return "curvePoint/add";
     }
 
-    // call the html page to update a curvePoint by Id
+    /**
+     * call the html page to update a curvePoint by Id
+     * get CurvePoint by Id and to model then show to the form
+     * @param id id of the curvePoint we want update
+     * @param model store information to use in the html page with Thymeleaf
+     * @return curvePoint/update
+     */
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // get CurvePoint by Id and to model then show to the form
-
-            logger.info("showUpdateForm");
+            logger.info("Get the form to update curvePoint");
             CurvePoint curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
             model.addAttribute("curvePoint", curvePoint);
         return "curvePoint/update";
     }
 
-    // pass the view information to the controller in order to update a curvePoint
+    /**
+     * pass the view information to the controller in order to update a curvePoint
+     * check required fields, if valid call service to update Curve and return Curve list
+     * @param id id of the curvePoint to update
+     * @param curvePoint curvePoint to update
+     * @param result if curvePoint pattern has error or not
+     * @param model store information to use in the html page with Thymeleaf
+     * @return curvePoint/update HTML page if result ko
+     * @return /curvePoint/list HTML page if result ok
+     */
     @PostMapping("/curvePoint/update/{id}")
     public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-        // check required fields, if valid call service to update Curve and return Curve list
-            logger.info("updateCurvePoint");
+            logger.info("validate curvePoint sent to controller and call service to update it");
             if (result.hasErrors()) {
                 return "curvePoint/update";
             }
@@ -100,11 +127,16 @@ public class CurveController {
         return "redirect:/curvePoint/list";
     }
 
-    // call the html page to delete curvePoint by Id
+    /**
+     * call the html page to delete curvePoint by Id
+     * Find Curve by Id and delete the Curve, return to Curve list
+     * @param id id of curvePoint to delete
+     * @param model store information to use in the html page with Thymeleaf
+     * @return /curvePoint/list HTML page
+     */
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteCurvePoint(@PathVariable("id") Integer id, Model model) {
-        // Find Curve by Id and delete the Curve, return to Curve list
-            logger.info("deleteCurvePoint");
+            logger.info("Call service to delete curvePoint");
             CurvePoint curvePoint1 = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
             curveService.delete(curvePoint1);
             model.addAttribute("curvePoints", curveService.getCurvePointList());
