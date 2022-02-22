@@ -29,9 +29,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/app/home").permitAll()
-                .antMatchers("/user/add").permitAll()
+                .antMatchers("/app/login").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/user/add").hasAnyAuthority("ADMIN")
                 .antMatchers("/admin/home").hasAnyAuthority("ADMIN")
                 .antMatchers("/user/list").hasAnyAuthority("ADMIN")
                 .antMatchers("/app/secure/article-details").hasAnyAuthority("ADMIN")
@@ -49,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/delete/{id}").hasAnyAuthority("ADMIN")
                 .and()
                 .exceptionHandling().accessDeniedPage("/app/error")
+
 
 
 

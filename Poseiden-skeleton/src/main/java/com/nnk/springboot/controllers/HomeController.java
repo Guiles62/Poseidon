@@ -16,22 +16,14 @@ public class HomeController {
 	@RequestMapping("/")
 	public String home(Model model)
 	{
-		try {
 			logger.info("home");
-		}catch (Exception ex) {
-			logger.error("home error");
-		}
 		return "home";
 	}
 
 	// call the home page for user as ADMIN authorities and redirect to the bidList/list html page
 	@RequestMapping("/admin/home")
 	public String adminHome(Model model) {
-		try {
 			logger.info("adminHome");
-		}catch (Exception ex) {
-			logger.error("adminHome error");
-		}
 		return "redirect:/bidList/list";
 	}
 

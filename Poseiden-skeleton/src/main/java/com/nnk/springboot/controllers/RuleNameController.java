@@ -32,25 +32,17 @@ public class RuleNameController {
     @RequestMapping("/ruleName/list")
     public String home(Principal principal, Model model) {
         // find all RuleName and get userInfo, add to model
-        try {
             logger.info("home");
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
             String userInfo = loginController.getUserInfo(principal);
             model.addAttribute("principal", userInfo);
-        } catch (Exception ex) {
-            logger.error("home error");
-        }
         return "ruleName/list";
     }
 
     // call the html page to add a ruleName
     @GetMapping("/ruleName/add")
     public String addRuleForm(RuleName ruleName) {
-        try {
             logger.info("addRuleForm");
-        } catch (Exception ex) {
-            logger.error("addRuleForm error");
-        }
         return "ruleName/add";
     }
 
@@ -58,16 +50,12 @@ public class RuleNameController {
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
         // check data valid and save to db, after saving return RuleName list
-        try {
             logger.info("validate");
             if (!result.hasErrors()) {
                 ruleNameService.saveRuleName(ruleName);
                 model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
                 return "redirect:/ruleName/list";
             }
-        } catch (Exception ex) {
-            logger.error("validate error");
-        }
         return "ruleName/add";
     }
 
@@ -75,13 +63,9 @@ public class RuleNameController {
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // get RuleName by Id and to model then show to the form
-        try {
             logger.info("showUpdateForm");
             RuleName rule = ruleNameService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
             model.addAttribute("ruleName", rule);
-        } catch (Exception ex) {
-            logger.error("showUpdateForm error");
-        }
         return "ruleName/update";
     }
 
@@ -90,16 +74,13 @@ public class RuleNameController {
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
         // check required fields, if valid call service to update RuleName and return RuleName list
-        try {
+
             logger.info("updateRuleName");
             if (result.hasErrors()) {
                 return "ruleName/update";
             }
             ruleNameService.updateRuleName(id, ruleName);
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
-        } catch (Exception ex) {
-            logger.error("updateRuleName error");
-        }
         return "redirect:/ruleName/list";
     }
 
@@ -107,14 +88,10 @@ public class RuleNameController {
     @GetMapping("/ruleName/delete/{id}")
     public String deleteRuleName(@PathVariable("id") Integer id, Model model) {
         // Find RuleName by Id and delete the RuleName, return to Rule list
-        try {
             logger.info("deleteRuleName");
             RuleName ruleName = ruleNameService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
             ruleNameService.delete(ruleName);
             model.addAttribute("ruleNames", ruleNameService.getRuleNameList());
-        } catch (Exception ex) {
-            logger.error("deleteRuleName error");
-        }
         return "redirect:/ruleName/list";
     }
 }

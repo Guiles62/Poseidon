@@ -26,42 +26,29 @@ public class BidListService {
 
     // call repository to find all Bid
     public List<BidList> getBidList () {
-        try {
             logger.info("getBidList");
-        } catch (Exception ex) {
-            logger.error("getBidList error");
-        }
       return bidListRepository.findAll();
     }
 
     // call repository to save a Bid
     public BidList saveBid(BidList bid) {
-        try {
             logger.info("saveBid");
             Timestamp creationDate = new Timestamp(System.currentTimeMillis());
             Timestamp bidListDate = new Timestamp(bid.getBidListDate().getTime());
             bid.setCreationDate(creationDate);
             bid.setBidListDate(bidListDate);
-        } catch (Exception ex) {
-            logger.error("saveBid error");
-        }
         return bidListRepository.save(bid);
     }
 
     // call repository to find a Bid by Id
     public Optional<BidList> findById(int id) {
-        try {
             logger.info("findById");
-        } catch (Exception ex) {
-            logger.error("findById error");
-        }
         return bidListRepository.findById(id);
     }
 
     // call repository to update a Bid by Id
     public BidList updateBid (int id, BidList bidList) {
             BidList bid = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
-            try {
                 logger.info("updateBid");
                 Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
                 Timestamp bidListDate = new Timestamp(bid.getBidListDate().getTime());
@@ -85,19 +72,12 @@ public class BidListService {
                 bid.setDealType(bidList.getDealType());
                 bid.setSourceListId(bidList.getSourceListId());
                 bid.setSide(bidList.getSide());
-            } catch (Exception ex) {
-                logger.error("updateBid error");
-            }
         return bidListRepository.save(bid);
     }
 
     // call repository to delete a Bid
     public void deleteBid(BidList bid) {
-        try {
             logger.info("deleteBid");
-        } catch (Exception ex) {
-            logger.error("delete bid error");
-        }
         bidListRepository.delete(bid);
     }
 }

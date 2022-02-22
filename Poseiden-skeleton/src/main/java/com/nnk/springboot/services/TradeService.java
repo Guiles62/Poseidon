@@ -24,40 +24,26 @@ public class TradeService {
     private final static Logger logger = LogManager.getLogger("TradeService");
 
     public List<Trade> getTradeList() {
-        try {
             logger.info("getTradeList");
-        } catch (Exception ex) {
-            logger.error("getTradeList error");
-        }
         return tradeRepository.findAll();
     }
 
     public Trade saveTrade (Trade trade) {
-        try {
             logger.info("saveTrade");
             Timestamp creationDate = new Timestamp(System.currentTimeMillis());
             Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
             trade.setCreationDate(creationDate);
             trade.setTradeDate(tradeDate);
-        } catch (Exception ex) {
-            logger.error("saveTrade error");
-        }
         return tradeRepository.save(trade);
     }
 
     public Optional<Trade> findById(int id) {
-        try {
             logger.info("finById");
-        } catch (Exception ex) {
-            logger.error("findById error");
-        }
         return tradeRepository.findById(id);
     }
 
     public Trade updateTrade(int id, Trade trade) {
-        // voir ce qu'il y a à mettre réellement à jour
         Trade tradeFind = tradeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
-        try {
             logger.info("updateTrade");
             Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
             Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
@@ -80,18 +66,11 @@ public class TradeService {
             tradeFind.setDealType(trade.getDealType());
             tradeFind.setSourceListId(trade.getSourceListId());
             tradeFind.setSide(trade.getSide());
-        } catch (Exception ex) {
-            logger.error("updateTrade error");
-        }
         return tradeRepository.save(tradeFind);
     }
 
     public void delete(Trade trade) {
-        try {
             logger.info("delete");
-        } catch (Exception ex) {
-            logger.error("delete error");
-        }
         tradeRepository.delete(trade);
     }
 }

@@ -32,25 +32,17 @@ public class TradeController {
     @RequestMapping("/trade/list")
     public String home(Principal principal, Model model) {
         // find all Trade and get userInfo, add to model
-        try {
             logger.info("home");
             model.addAttribute("trades", tradeService.getTradeList());
             String userInfo = loginController.getUserInfo(principal);
             model.addAttribute("principal", userInfo);
-        } catch (Exception ex) {
-            logger.error("home error");
-        }
         return "trade/list";
     }
 
     // call the html page to add a trade
     @GetMapping("/trade/add")
     public String addTrade(Trade trade) {
-        try {
             logger.info("addTrade");
-        } catch (Exception ex) {
-            logger.error("addTrade error");
-        }
         return "trade/add";
     }
 
@@ -58,16 +50,12 @@ public class TradeController {
     @PostMapping("/trade/validate")
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
         // check data valid and save to db, after saving return Trade list
-        try {
             logger.info("validate");
             if (!result.hasErrors()) {
                 tradeService.saveTrade(trade);
                 model.addAttribute("trades", tradeService.getTradeList());
                 return "redirect:/trade/list";
             }
-        } catch (Exception ex) {
-            logger.error("validate error");
-        }
         return "trade/add";
     }
 
@@ -75,13 +63,9 @@ public class TradeController {
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // get Trade by Id and to model then show to the form
-        try {
             logger.info("showUpdateForm");
             Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
             model.addAttribute("trade", trade);
-        } catch (Exception ex) {
-            logger.error("showUpdateForm error");
-        }
         return "trade/update";
     }
 
@@ -90,16 +74,12 @@ public class TradeController {
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
                              BindingResult result, Model model) {
         // check required fields, if valid call service to update Trade and return Trade list
-        try {
             logger.info("updateTrade");
             if (result.hasErrors()) {
                 return "trade/update";
             }
             tradeService.updateTrade(id, trade);
             model.addAttribute("trades", tradeService.getTradeList());
-        } catch (Exception ex) {
-            logger.error("updateTrade error");
-        }
         return "redirect:/trade/list";
     }
 
@@ -107,14 +87,10 @@ public class TradeController {
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         // Find Trade by Id and call service to delete the Trade, return to Trade list
-        try {
             logger.info("deleteTrade");
             Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
             tradeService.delete(trade);
             model.addAttribute("trades", tradeService.getTradeList());
-        } catch (Exception ex) {
-            logger.error("deleteTrade error");
-        }
         return "redirect:/trade/list";
     }
 }

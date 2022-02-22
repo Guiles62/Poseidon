@@ -28,23 +28,15 @@ public class UserController {
     @RequestMapping("/user/list")
     public String home(Model model) {
         // find all users, add to model
-        try {
             logger.info("home");
             model.addAttribute("users", userService.getUserList());
-        } catch (Exception ex) {
-            logger.error("home error");
-        }
         return "user/list";
     }
 
     // call the html page to add a user
     @GetMapping("/user/add")
     public String addUser(User bid) {
-        try{
             logger.info("addUser");
-        } catch (Exception ex) {
-            logger.error("addUser error");
-        }
         return "user/add";
     }
 
@@ -52,16 +44,13 @@ public class UserController {
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
         // check data valid and save to db, after saving return User list
-        try {
+
             logger.info("validate");
             if (!result.hasErrors()) {
                 userService.addUser(user);
                 model.addAttribute("users", userService.getUserList());
                 return "redirect:/user/list";
             }
-        }catch (Exception ex) {
-            logger.error("validate error");
-        }
         return "user/add";
     }
 
@@ -69,14 +58,10 @@ public class UserController {
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // get User by Id and to model then show to the form
-        try {
             logger.info("showUpdateForm");
             User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
             user.setPassword("");
             model.addAttribute("user", user);
-        } catch (Exception ex) {
-            logger.error("showUpdateForm error");
-        }
         return "user/update";
     }
 
@@ -85,16 +70,12 @@ public class UserController {
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
         // check required fields, if valid call service to update User and return User list
-        try {
             logger.info("updateUser");
             if (result.hasErrors()) {
                 return "user/update";
             }
             userService.updateUser(id, user);
             model.addAttribute("users", userService.getUserList());
-        } catch (Exception ex) {
-            logger.error("updateUser error");
-        }
         return "redirect:/user/list";
     }
 
@@ -102,14 +83,11 @@ public class UserController {
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
         // Find User by Id and call service to delete the User, return to User list
-        try {
+
             logger.info("deleteUser");
             User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
             userService.delete(user);
             model.addAttribute("users", userService.getUserList());
-        } catch (Exception ex) {
-            logger.error("deleteUser error");
-        }
         return "redirect:/user/list";
     }
 }
