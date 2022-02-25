@@ -42,7 +42,7 @@ public class RatingService {
      * @return the rating list
      */
     public List<Rating> getRatingList() {
-            logger.info("Call repository to find rating List");
+        logger.info("Call repository to find rating List");
         return ratingRepository.findAll();
     }
 
@@ -52,7 +52,7 @@ public class RatingService {
      * @return call repository to save new rating
      */
     public Rating saveRating(Rating rating) {
-            logger.info("Call repository to save new Rating");
+        logger.info("Call repository to save new Rating");
         return ratingRepository.save(rating);
     }
 
@@ -62,7 +62,7 @@ public class RatingService {
      * @return call repository to find rating by id
      */
     public Optional<Rating> findById(int id) {
-            logger.info("Call repository to find rating by id");
+        logger.info("Call repository to find rating by id");
         return ratingRepository.findById(id);
     }
 
@@ -74,11 +74,11 @@ public class RatingService {
      */
     public Rating updateRating(int id, Rating rating) {
         Rating ratingFind = ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
-            logger.info("Call the repository to update rating by id");
-            ratingFind.setMoodysRating(rating.getMoodysRating());
-            ratingFind.setSandPRating(rating.getSandPRating());
-            ratingFind.setFitchRating(rating.getFitchRating());
-            ratingFind.setOrderNumber(rating.getOrderNumber());
+        logger.info("Call the repository to update rating by id");
+        ratingFind.setMoodysRating(rating.getMoodysRating());
+        ratingFind.setSandPRating(rating.getSandPRating());
+        ratingFind.setFitchRating(rating.getFitchRating());
+        ratingFind.setOrderNumber(rating.getOrderNumber());
         return ratingRepository.save(ratingFind);
     }
 
@@ -87,7 +87,7 @@ public class RatingService {
      * @param rating rating to delete
      */
     public void delete(Rating rating) {
-            logger.info("Call repository to delete rating");
+        logger.info("Call repository to delete rating");
         ratingRepository.delete(rating);
     }
 }

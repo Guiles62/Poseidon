@@ -48,7 +48,7 @@ public class CurveService {
      * @return
      */
     public List<CurvePoint> getCurvePointList () {
-           logger.info("Call repository to get CurvePoint List");
+        logger.info("Call repository to get CurvePoint List");
         return curvePointRepository.findAll();
     }
 
@@ -58,9 +58,9 @@ public class CurveService {
      * @return call repository to save curvePoint
      */
     public CurvePoint saveCurvePoint (CurvePoint curvePoint) {
-            logger.info("Call repository to save new CurvePoint");
-            Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-            curvePoint.setCreationDate(creationDate);
+        logger.info("Call repository to save new CurvePoint");
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        curvePoint.setCreationDate(creationDate);
         return curvePointRepository.save(curvePoint);
     }
 
@@ -71,7 +71,7 @@ public class CurveService {
      */
 
     public Optional<CurvePoint> getCurvePointById(int id) {
-            logger.info("Call repository to find curvePoint by id");
+        logger.info("Call repository to find curvePoint by id");
         return curvePointRepository.findById(id);
     }
 
@@ -82,14 +82,14 @@ public class CurveService {
      * @return call repository to save curvePoint with changes
      */
     public CurvePoint updateCurvePoint(int id, CurvePoint curvePoint) {
-            CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
-            logger.info("call repository to update curvePoint");
-            Timestamp asOfDate = new Timestamp(System.currentTimeMillis());
-            curve.setCurveId(curvePoint.getCurveId());
-            curve.setAsOfDate(asOfDate);
-            curve.setTerm(curvePoint.getTerm());
-            curve.setValue(curvePoint.getValue());
-            return curvePointRepository.save(curve);
+        CurvePoint curve = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
+        logger.info("call repository to update curvePoint");
+        Timestamp asOfDate = new Timestamp(System.currentTimeMillis());
+        curve.setCurveId(curvePoint.getCurveId());
+        curve.setAsOfDate(asOfDate);
+        curve.setTerm(curvePoint.getTerm());
+        curve.setValue(curvePoint.getValue());
+        return curvePointRepository.save(curve);
     }
 
     /**
@@ -97,7 +97,7 @@ public class CurveService {
      * @param curvePoint
      */
     public void delete(CurvePoint curvePoint) {
-            logger.info("call repository to delete curvePoint");
+        logger.info("call repository to delete curvePoint");
         curvePointRepository.delete(curvePoint);
     }
 }

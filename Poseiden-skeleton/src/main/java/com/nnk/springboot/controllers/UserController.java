@@ -48,8 +48,8 @@ public class UserController {
      */
     @RequestMapping("/user/list")
     public String home(Model model) {
-            logger.info("Get User List to service and add to model");
-            model.addAttribute("users", userService.getUserList());
+        logger.info("Get User List to service and add to model");
+        model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
 
@@ -60,7 +60,7 @@ public class UserController {
      */
     @GetMapping("/user/add")
     public String addUser(User user) {
-            logger.info("Get User form to add new User");
+        logger.info("Get User form to add new User");
         return "user/add";
     }
 
@@ -75,12 +75,12 @@ public class UserController {
      */
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
-            logger.info("Validate User send to controller and call service to save it");
-            if (!result.hasErrors()) {
-                userService.addUser(user);
-                model.addAttribute("users", userService.getUserList());
-                return "redirect:/user/list";
-            }
+        logger.info("Validate User send to controller and call service to save it");
+        if (!result.hasErrors()) {
+            userService.addUser(user);
+            model.addAttribute("users", userService.getUserList());
+            return "redirect:/user/list";
+        }
         return "user/add";
     }
 
@@ -93,10 +93,10 @@ public class UserController {
      */
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-            logger.info("get the form to update a user");
-            User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            user.setPassword("");
-            model.addAttribute("user", user);
+        logger.info("get the form to update a user");
+        User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        user.setPassword("");
+        model.addAttribute("user", user);
         return "user/update";
     }
 
@@ -113,12 +113,12 @@ public class UserController {
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
-            logger.info("validate User sent to controller and call service to update it");
-            if (result.hasErrors()) {
-                return "user/update";
-            }
-            userService.updateUser(id, user);
-            model.addAttribute("users", userService.getUserList());
+        logger.info("validate User sent to controller and call service to update it");
+        if (result.hasErrors()) {
+            return "user/update";
+        }
+        userService.updateUser(id, user);
+        model.addAttribute("users", userService.getUserList());
         return "redirect:/user/list";
     }
 
@@ -131,10 +131,10 @@ public class UserController {
      */
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
-            logger.info("Call service to delete user");
-            User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            userService.delete(user);
-            model.addAttribute("users", userService.getUserList());
+        logger.info("Call service to delete user");
+        User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        userService.delete(user);
+        model.addAttribute("users", userService.getUserList());
         return "redirect:/user/list";
     }
 }

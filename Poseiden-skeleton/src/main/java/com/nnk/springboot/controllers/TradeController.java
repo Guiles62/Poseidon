@@ -53,10 +53,10 @@ public class TradeController {
      */
     @RequestMapping("/trade/list")
     public String home(Principal principal, Model model) {
-            logger.info("Get the Trade List to service and add to model");
-            model.addAttribute("trades", tradeService.getTradeList());
-            String userInfo = loginController.getUserInfo(principal);
-            model.addAttribute("principal", userInfo);
+        logger.info("Get the Trade List to service and add to model");
+        model.addAttribute("trades", tradeService.getTradeList());
+        String userInfo = loginController.getUserInfo(principal);
+        model.addAttribute("principal", userInfo);
         return "trade/list";
     }
 
@@ -67,7 +67,7 @@ public class TradeController {
      */
     @GetMapping("/trade/add")
     public String addTrade(Trade trade) {
-            logger.info("Get Trade form to add new Trade");
+        logger.info("Get Trade form to add new Trade");
         return "trade/add";
     }
 
@@ -82,12 +82,12 @@ public class TradeController {
      */
     @PostMapping("/trade/validate")
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
-            logger.info("Validate Trade send to controller and call service to save it");
-            if (!result.hasErrors()) {
-                tradeService.saveTrade(trade);
-                model.addAttribute("trades", tradeService.getTradeList());
-                return "redirect:/trade/list";
-            }
+        logger.info("Validate Trade send to controller and call service to save it");
+        if (!result.hasErrors()) {
+            tradeService.saveTrade(trade);
+            model.addAttribute("trades", tradeService.getTradeList());
+            return "redirect:/trade/list";
+        }
         return "trade/add";
     }
 
@@ -100,9 +100,9 @@ public class TradeController {
      */
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-            logger.info("Get the form to update a trade");
-            Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            model.addAttribute("trade", trade);
+        logger.info("Get the form to update a trade");
+        Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        model.addAttribute("trade", trade);
         return "trade/update";
     }
 
@@ -119,12 +119,12 @@ public class TradeController {
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
                              BindingResult result, Model model) {
-            logger.info("validate Trade sent to controller and call service to update it");
-            if (result.hasErrors()) {
-                return "trade/update";
-            }
-            tradeService.updateTrade(id, trade);
-            model.addAttribute("trades", tradeService.getTradeList());
+        logger.info("validate Trade sent to controller and call service to update it");
+        if (result.hasErrors()) {
+            return "trade/update";
+        }
+        tradeService.updateTrade(id, trade);
+        model.addAttribute("trades", tradeService.getTradeList());
         return "redirect:/trade/list";
     }
 
@@ -137,10 +137,10 @@ public class TradeController {
      */
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
-            logger.info("call service to delete Trade");
-            Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
-            tradeService.delete(trade);
-            model.addAttribute("trades", tradeService.getTradeList());
+        logger.info("call service to delete Trade");
+        Trade trade = tradeService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
+        tradeService.delete(trade);
+        model.addAttribute("trades", tradeService.getTradeList());
         return "redirect:/trade/list";
     }
 }

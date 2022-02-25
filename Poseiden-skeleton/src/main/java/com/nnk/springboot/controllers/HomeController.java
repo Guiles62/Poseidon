@@ -31,7 +31,7 @@ public class HomeController {
 	@RequestMapping("/")
 	public String home(Model model)
 	{
-			logger.info("Get Home HTML page");
+		logger.info("Get Home HTML page");
 		return "home";
 	}
 
@@ -42,7 +42,7 @@ public class HomeController {
 	 */
 	@RequestMapping("/admin/home")
 	public String adminHome(Model model) {
-			logger.info("Get Admin home HTML page");
+		logger.info("Get Admin home HTML page");
 		return "redirect:/bidList/list";
 	}
 

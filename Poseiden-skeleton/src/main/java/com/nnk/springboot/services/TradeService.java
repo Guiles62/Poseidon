@@ -44,7 +44,7 @@ public class TradeService {
      * @return call repository to find all trades
      */
     public List<Trade> getTradeList() {
-            logger.info("Call repository to find the trade list");
+        logger.info("Call repository to find the trade list");
         return tradeRepository.findAll();
     }
 
@@ -54,11 +54,11 @@ public class TradeService {
      * @return call repository to save trade
      */
     public Trade saveTrade (Trade trade) {
-            logger.info("Call repository to save new trade");
-            Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-            Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
-            trade.setCreationDate(creationDate);
-            trade.setTradeDate(tradeDate);
+        logger.info("Call repository to save new trade");
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
+        trade.setCreationDate(creationDate);
+        trade.setTradeDate(tradeDate);
         return tradeRepository.save(trade);
     }
 
@@ -68,7 +68,7 @@ public class TradeService {
      * @return call repository to find trade by id
      */
     public Optional<Trade> findById(int id) {
-            logger.info("Call repository to find a trade by id");
+        logger.info("Call repository to find a trade by id");
         return tradeRepository.findById(id);
     }
 
@@ -80,28 +80,28 @@ public class TradeService {
      */
     public Trade updateTrade(int id, Trade trade) {
         Trade tradeFind = tradeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid trade Id:" + id));
-            logger.info("Call repository to update a trade");
-            Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
-            Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
-            tradeFind.setAccount(trade.getAccount());
-            tradeFind.setType(trade.getType());
-            tradeFind.setBuyQuantity(trade.getBuyQuantity());
-            tradeFind.setSellQuantity(trade.getSellQuantity());
-            tradeFind.setBuyPrice(trade.getBuyPrice());
-            tradeFind.setSellPrice(trade.getSellPrice());
-            tradeFind.setBenchmark(trade.getBenchmark());
-            tradeFind.setTradeDate(tradeDate);
-            tradeFind.setSecurity(trade.getSecurity());
-            tradeFind.setStatus(trade.getStatus());
-            tradeFind.setTrader(trade.getTrader());
-            tradeFind.setBook(trade.getBook());
-            tradeFind.setCreationName(trade.getCreationName());
-            tradeFind.setRevisionName(trade.getRevisionName());
-            tradeFind.setRevisionDate(revisionDate);
-            tradeFind.setDealName(trade.getDealName());
-            tradeFind.setDealType(trade.getDealType());
-            tradeFind.setSourceListId(trade.getSourceListId());
-            tradeFind.setSide(trade.getSide());
+        logger.info("Call repository to update a trade");
+        Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
+        Timestamp tradeDate = new Timestamp(trade.getTradeDate().getTime());
+        tradeFind.setAccount(trade.getAccount());
+        tradeFind.setType(trade.getType());
+        tradeFind.setBuyQuantity(trade.getBuyQuantity());
+        tradeFind.setSellQuantity(trade.getSellQuantity());
+        tradeFind.setBuyPrice(trade.getBuyPrice());
+        tradeFind.setSellPrice(trade.getSellPrice());
+        tradeFind.setBenchmark(trade.getBenchmark());
+        tradeFind.setTradeDate(tradeDate);
+        tradeFind.setSecurity(trade.getSecurity());
+        tradeFind.setStatus(trade.getStatus());
+        tradeFind.setTrader(trade.getTrader());
+        tradeFind.setBook(trade.getBook());
+        tradeFind.setCreationName(trade.getCreationName());
+        tradeFind.setRevisionName(trade.getRevisionName());
+        tradeFind.setRevisionDate(revisionDate);
+        tradeFind.setDealName(trade.getDealName());
+        tradeFind.setDealType(trade.getDealType());
+        tradeFind.setSourceListId(trade.getSourceListId());
+        tradeFind.setSide(trade.getSide());
         return tradeRepository.save(tradeFind);
     }
 
@@ -110,7 +110,7 @@ public class TradeService {
      * @param trade trade to delete
      */
     public void delete(Trade trade) {
-            logger.info("Call repository to delete a trade");
+        logger.info("Call repository to delete a trade");
         tradeRepository.delete(trade);
     }
 }

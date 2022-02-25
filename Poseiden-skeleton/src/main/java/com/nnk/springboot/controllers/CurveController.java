@@ -52,10 +52,10 @@ public class CurveController {
      */
     @RequestMapping("/curvePoint/list")
     public String home(Principal principal, Model model) {
-            logger.info("get curvePoint list to service and add to model");
-            model.addAttribute("curvePoints", curveService.getCurvePointList());
-            String userInfo = loginController.getUserInfo(principal);
-            model.addAttribute("principal", userInfo);
+        logger.info("get curvePoint list to service and add to model");
+        model.addAttribute("curvePoints", curveService.getCurvePointList());
+        String userInfo = loginController.getUserInfo(principal);
+        model.addAttribute("principal", userInfo);
         return "curvePoint/list";
     }
 
@@ -66,7 +66,7 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/add")
     public String addCurvePointForm(CurvePoint curvePoint) {
-            logger.info("addCurvePointForm");
+        logger.info("addCurvePointForm");
         return "curvePoint/add";
     }
 
@@ -81,13 +81,13 @@ public class CurveController {
      */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-            logger.info("validate curvePoint sent to controller and call service to save it");
-            if (!result.hasErrors()) {
-                curveService.saveCurvePoint(curvePoint);
-                model.addAttribute("curvePoints", curveService.getCurvePointList());
-                return "redirect:/curvePoint/list";
-            }
-        return "curvePoint/add";
+         logger.info("validate curvePoint sent to controller and call service to save it");
+         if (!result.hasErrors()) {
+             curveService.saveCurvePoint(curvePoint);
+             model.addAttribute("curvePoints", curveService.getCurvePointList());
+             return "redirect:/curvePoint/list";
+         }
+         return "curvePoint/add";
     }
 
     /**
@@ -99,10 +99,10 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-            logger.info("Get the form to update curvePoint");
-            CurvePoint curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
-            model.addAttribute("curvePoint", curvePoint);
-        return "curvePoint/update";
+         logger.info("Get the form to update curvePoint");
+         CurvePoint curvePoint = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
+         model.addAttribute("curvePoint", curvePoint);
+         return "curvePoint/update";
     }
 
     /**
@@ -118,13 +118,13 @@ public class CurveController {
     @PostMapping("/curvePoint/update/{id}")
     public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
-            logger.info("validate curvePoint sent to controller and call service to update it");
-            if (result.hasErrors()) {
-                return "curvePoint/update";
-            }
-            curveService.updateCurvePoint(id, curvePoint);
-            model.addAttribute("curvePoints", curveService.getCurvePointList());
-        return "redirect:/curvePoint/list";
+         logger.info("validate curvePoint sent to controller and call service to update it");
+         if (result.hasErrors()) {
+             return "curvePoint/update";
+         }
+         curveService.updateCurvePoint(id, curvePoint);
+         model.addAttribute("curvePoints", curveService.getCurvePointList());
+         return "redirect:/curvePoint/list";
     }
 
     /**
@@ -136,10 +136,10 @@ public class CurveController {
      */
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteCurvePoint(@PathVariable("id") Integer id, Model model) {
-            logger.info("Call service to delete curvePoint");
-            CurvePoint curvePoint1 = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
-            curveService.delete(curvePoint1);
-            model.addAttribute("curvePoints", curveService.getCurvePointList());
+        logger.info("Call service to delete curvePoint");
+        CurvePoint curvePoint1 = curveService.getCurvePointById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curvePoint Id:" + id));
+        curveService.delete(curvePoint1);
+        model.addAttribute("curvePoints", curveService.getCurvePointList());
         return "redirect:/curvePoint/list";
     }
 }

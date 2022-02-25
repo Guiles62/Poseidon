@@ -51,9 +51,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/app/error")
 
 
-
-
-
                 .and()
                 .formLogin()
                 .loginPage("/login").defaultSuccessUrl("/bidList/list").failureUrl("/")

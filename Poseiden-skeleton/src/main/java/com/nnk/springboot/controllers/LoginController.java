@@ -58,10 +58,10 @@ public class LoginController {
      */
     @GetMapping("/login")
     public ModelAndView login() {
-            logger.info("Get the Login HTML page");
-            ModelAndView mav = new ModelAndView();
-            mav.setViewName("login");
-            return mav;
+        logger.info("Get the Login HTML page");
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("login");
+        return mav;
     }
 
     /**

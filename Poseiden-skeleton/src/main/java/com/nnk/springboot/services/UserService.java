@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
      * @return call repository to find all users
      */
     public List<User> getUserList() {
-            logger.info("Call repository to find all users");
+        logger.info("Call repository to find all users");
         return userRepository.findAll();
     }
 
@@ -58,10 +58,10 @@ public class UserService implements UserDetailsService {
      * @return call repository to save the user
      */
     public User addUser (User user) {
-            logger.info("Call repository to save new user");
-                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String password = passwordEncoder.encode(user.getPassword());
-                user.setPassword(password);
+        logger.info("Call repository to save new user");
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
         return userRepository.save(user);
     }
 
@@ -71,7 +71,7 @@ public class UserService implements UserDetailsService {
      * @return call repository to find user by his id
      */
     public Optional<User> findById (int id) {
-            logger.info("Call repository to find a user by id");
+        logger.info("Call repository to find a user by id");
         return userRepository.findById(id);
     }
 
@@ -83,12 +83,12 @@ public class UserService implements UserDetailsService {
      */
     public User updateUser (int id, User user) {
         User userFind = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            logger.info("Call repository to update a user");
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            userFind.setFullName(user.getFullName());
-            userFind.setUserName(user.getUserName());
-            userFind.setRole(user.getRole());
-            userFind.setPassword(encoder.encode(user.getPassword()));
+        logger.info("Call repository to update a user");
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userFind.setFullName(user.getFullName());
+        userFind.setUserName(user.getUserName());
+        userFind.setRole(user.getRole());
+        userFind.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService {
      * @param user user to delete
      */
     public void delete (User user) {
-            logger.info("Call repository to delete a user");
+        logger.info("Call repository to delete a user");
         userRepository.delete(user);
     }
 
@@ -110,7 +110,7 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-            logger.info("Call repository to find user by userName");
+        logger.info("Call repository to find user by userName");
         return (UserDetails) userRepository.findByUserName(s);
     }
 

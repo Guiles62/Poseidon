@@ -54,14 +54,13 @@ public class BidListController {
      * @param principal is the connected user
      * @param model store information to use in the html page with Thymeleaf
      * @return bidList/list HTML page
-     *
      */
     @RequestMapping("/bidList/list")
     public String home(Principal principal,Model model) {
-            logger.info("Get Bid List to service and add to model");
-            model.addAttribute("bidList", bidListService.getBidList());
-            String userInfo = loginController.getUserInfo(principal);
-            model.addAttribute("principal", userInfo);
+        logger.info("Get Bid List to service and add to model");
+        model.addAttribute("bidList", bidListService.getBidList());
+        String userInfo = loginController.getUserInfo(principal);
+        model.addAttribute("principal", userInfo);
         return "bidList/list";
     }
 
@@ -72,7 +71,7 @@ public class BidListController {
      */
     @GetMapping("/bidList/add")
     public String addBidForm(BidList bid) {
-            logger.info("Get Bid Form to add new Bid");
+        logger.info("Get Bid Form to add new Bid");
         return "bidList/add";
     }
 
@@ -87,12 +86,12 @@ public class BidListController {
      */
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
-            logger.info("Validate Bid send to controller and call service to save it");
-            if (!result.hasErrors()) {
-                bidListService.saveBid(bid);
-                model.addAttribute("bidList", bidListService.getBidList());
-                return "redirect:/bidList/list ";
-            }
+        logger.info("Validate Bid send to controller and call service to save it");
+        if (!result.hasErrors()) {
+            bidListService.saveBid(bid);
+            model.addAttribute("bidList", bidListService.getBidList());
+            return "redirect:/bidList/list ";
+        }
         return "bidList/add";
     }
 
@@ -105,9 +104,9 @@ public class BidListController {
      */
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-            logger.info("Get the form to update Bid");
-            BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-            model.addAttribute("bid", bid);
+        logger.info("Get the form to update Bid");
+        BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        model.addAttribute("bid", bid);
         return "bidList/update";
     }
 
@@ -124,12 +123,12 @@ public class BidListController {
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                              BindingResult result, Model model) {
-            logger.info("validate Bid sent to controller and call service to update it");
-            if (result.hasErrors()) {
-                return "bidList/update";
-            }
-            bidListService.updateBid(id, bidList);
-            model.addAttribute("bidList", bidListService.getBidList());
+        logger.info("validate Bid sent to controller and call service to update it");
+        if (result.hasErrors()) {
+            return "bidList/update";
+        }
+        bidListService.updateBid(id, bidList);
+        model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";
     }
 
@@ -142,10 +141,10 @@ public class BidListController {
      */
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-            logger.info("Call service to delete Bid");
-            BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
-            bidListService.deleteBid(bid);
-            model.addAttribute("bidList", bidListService.getBidList());
+        logger.info("Call service to delete Bid");
+        BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
+        bidListService.deleteBid(bid);
+        model.addAttribute("bidList", bidListService.getBidList());
         return "redirect:/bidList/list";
     }
 }

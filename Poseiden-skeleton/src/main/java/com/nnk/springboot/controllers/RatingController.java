@@ -57,10 +57,10 @@ public class RatingController {
      */
     @RequestMapping("/rating/list")
     public String home(Principal principal, Model model) {
-            logger.info("Get rating list to service and add to model");
-            model.addAttribute("ratings", ratingService.getRatingList());
-            String userInfo = loginController.getUserInfo(principal);
-            model.addAttribute("principal", userInfo);
+        logger.info("Get rating list to service and add to model");
+        model.addAttribute("ratings", ratingService.getRatingList());
+        String userInfo = loginController.getUserInfo(principal);
+        model.addAttribute("principal", userInfo);
         return "rating/list";
     }
 
@@ -71,7 +71,7 @@ public class RatingController {
      */
     @GetMapping("/rating/add")
     public String addRatingForm(Rating rating) {
-            logger.info("Get Rating form to add a new rating");
+        logger.info("Get Rating form to add a new rating");
         return "rating/add";
     }
 
@@ -86,12 +86,12 @@ public class RatingController {
      */
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
-            logger.info("Validate Rating send to controller and call service to save it");
-            if (!result.hasErrors()) {
-                ratingService.saveRating(rating);
-                model.addAttribute("ratings", ratingService.getRatingList());
-                return "redirect:/rating/list";
-            }
+        logger.info("Validate Rating send to controller and call service to save it");
+        if (!result.hasErrors()) {
+            ratingService.saveRating(rating);
+            model.addAttribute("ratings", ratingService.getRatingList());
+            return "redirect:/rating/list";
+        }
         return "rating/add";
     }
 
@@ -104,9 +104,9 @@ public class RatingController {
      */
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-            logger.info("Get the form to update rating");
-            Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
-            model.addAttribute("rating", rating);
+        logger.info("Get the form to update rating");
+        Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
+        model.addAttribute("rating", rating);
         return "rating/update";
     }
 
@@ -123,12 +123,12 @@ public class RatingController {
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {
-            logger.info("validate Rating sent to controller and call service to update it");
-            if (result.hasErrors()) {
-                return "rating/update";
-            }
-            ratingService.updateRating(id, rating);
-            model.addAttribute("ratings", ratingService.getRatingList());
+        logger.info("validate Rating sent to controller and call service to update it");
+        if (result.hasErrors()) {
+            return "rating/update";
+        }
+        ratingService.updateRating(id, rating);
+        model.addAttribute("ratings", ratingService.getRatingList());
         return "redirect:/rating/list";
     }
 
@@ -141,10 +141,10 @@ public class RatingController {
      */
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
-            logger.info("Call service to delete rating");
-            Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
-            ratingService.delete(rating);
-            model.addAttribute("ratings", ratingService.getRatingList());
+        logger.info("Call service to delete rating");
+        Rating rating = ratingService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
+        ratingService.delete(rating);
+        model.addAttribute("ratings", ratingService.getRatingList());
         return "redirect:/rating/list";
     }
 }

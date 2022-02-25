@@ -42,7 +42,7 @@ public class RuleNameService {
      * @return Call the repository to find the ruleName List
      */
     public List<RuleName> getRuleNameList() {
-            logger.info("Call the repository to find the ruleName List");
+        logger.info("Call the repository to find the ruleName List");
         return ruleNameRepository.findAll();
     }
 
@@ -52,7 +52,7 @@ public class RuleNameService {
      * @return call repository to save new ruleName
      */
     public RuleName saveRuleName(RuleName ruleName) {
-            logger.info("Call repository to save nex ruleName");
+        logger.info("Call repository to save nex ruleName");
         return ruleNameRepository.save(ruleName);
     }
 
@@ -62,7 +62,7 @@ public class RuleNameService {
      * @return call repository to find ruleName by id
      */
     public Optional<RuleName> findById (int id) {
-            logger.info("Call repository to find a ruleName by id");
+        logger.info("Call repository to find a ruleName by id");
         return ruleNameRepository.findById(id);
     }
 
@@ -74,13 +74,13 @@ public class RuleNameService {
      */
     public RuleName updateRuleName (int id, RuleName ruleName) {
         RuleName rule = ruleNameRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ruleName Id:" + id));
-            logger.info("Call repository to update a ruleName");
-            rule.setName(ruleName.getName());
-            rule.setDescription(ruleName.getDescription());
-            rule.setJson(ruleName.getJson());
-            rule.setTemplate(ruleName.getTemplate());
-            rule.setSqlStr(ruleName.getSqlStr());
-            rule.setSqlPart(ruleName.getSqlPart());
+        logger.info("Call repository to update a ruleName");
+        rule.setName(ruleName.getName());
+        rule.setDescription(ruleName.getDescription());
+        rule.setJson(ruleName.getJson());
+        rule.setTemplate(ruleName.getTemplate());
+        rule.setSqlStr(ruleName.getSqlStr());
+        rule.setSqlPart(ruleName.getSqlPart());
         return ruleNameRepository.save(rule);
     }
 
@@ -89,7 +89,7 @@ public class RuleNameService {
      * @param ruleName ruleName to delete
      */
     public void delete(RuleName ruleName) {
-            logger.info("Call repository to delete ruleName");
+        logger.info("Call repository to delete ruleName");
         ruleNameRepository.delete(ruleName);
     }
 }
