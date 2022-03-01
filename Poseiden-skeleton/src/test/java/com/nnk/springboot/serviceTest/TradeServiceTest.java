@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +38,14 @@ public class TradeServiceTest {
 
     @Before
     public void setup() {
+        Timestamp revisionDate = new Timestamp(System.currentTimeMillis());
+        Timestamp tradeDate = new Timestamp(System.currentTimeMillis() - 60);
         trade = new Trade();
         trade.setTradeId(1);
         trade.setTrader("trader");
         trade.setSide("side");
+        trade.setTradeDate(tradeDate);
+        trade.setRevisionDate(revisionDate);
         when(tradeRepository.findAll()).thenReturn(tradeList);
         tradeService = new TradeService(tradeRepository);
     }

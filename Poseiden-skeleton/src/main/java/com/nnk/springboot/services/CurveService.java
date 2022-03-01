@@ -34,7 +34,7 @@ import static org.apache.tomcat.jni.Time.now;
 @Service
 public class CurveService {
 
-    @Autowired
+
     CurvePointRepository curvePointRepository;
 
     public CurveService(CurvePointRepository curvePointRepository) {

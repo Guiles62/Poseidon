@@ -36,7 +36,6 @@ import java.security.Principal;
 @Controller
 public class BidListController {
 
-    @Autowired
     BidListService bidListService;
 
     @Autowired

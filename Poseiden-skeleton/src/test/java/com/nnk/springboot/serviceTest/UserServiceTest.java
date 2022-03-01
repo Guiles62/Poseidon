@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -37,8 +38,11 @@ public class UserServiceTest {
 
     @Before
     public void setup() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String pass = encoder.encode("1234");
         user = new User();
         user.setId(1);
+        user.setPassword(pass);
         user.setRole("ADMIN");
         when(userRepository.findAll()).thenReturn(userList);
         userService = new UserService(userRepository);

@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,24 +27,28 @@ import static org.mockito.Mockito.*;
 public class BidListServiceTest {
 
     @Autowired
-    private BidListService bidListService;
+    BidListService bidListService;
 
     @Mock
-    private BidListRepository bidListRepository;
+    BidListRepository bidListRepository;
 
     @InjectMocks
-    private BidList bid;
+    BidList bid;
 
     List<BidList> bidListList = new ArrayList<>();
 
 
     @Before
     public void setup() {
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        Timestamp bidListDate = new Timestamp(System.currentTimeMillis() - 60);
         bid = new BidList();
         bid.setAccount("account Test");
         bid.setType("type Test");
         bid.setBidQuantity(10d);
         bid.setBidListId(1);
+        bid.setBidListDate(creationDate);
+        bid.setBidListDate(bidListDate);
         when(bidListRepository.findAll()).thenReturn(bidListList);
         bidListService = new BidListService(bidListRepository);
 
@@ -61,7 +66,7 @@ public class BidListServiceTest {
     public void saveBidTest() {
         when(bidListRepository.save(bid)).thenReturn(bid);
         bidListService.saveBid(bid);
-        assertEquals(bid, bidListRepository.save(bid));
+        verify(bidListRepository,times(1)).save(bid);
     }
 
     @Test

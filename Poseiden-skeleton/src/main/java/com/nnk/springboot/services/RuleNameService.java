@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 public class RuleNameService {
 
-    @Autowired
+
     RuleNameRepository ruleNameRepository;
 
     public RuleNameService(RuleNameRepository ruleNameRepository) {

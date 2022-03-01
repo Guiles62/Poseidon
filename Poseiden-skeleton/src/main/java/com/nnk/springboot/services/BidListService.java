@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 public class BidListService {
 
-    @Autowired
+
     BidListRepository bidListRepository;
 
     public BidListService(BidListRepository bidListRepository) {

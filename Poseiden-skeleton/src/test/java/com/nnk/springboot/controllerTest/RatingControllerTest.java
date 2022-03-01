@@ -2,8 +2,10 @@ package com.nnk.springboot.controllerTest;
 
 import com.nnk.springboot.controllers.RatingController;
 import com.nnk.springboot.domain.Rating;
+import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.RatingService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -13,6 +15,9 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -28,13 +33,13 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class RatingControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @Mock
     RatingService ratingService;
@@ -42,20 +47,21 @@ public class RatingControllerTest {
     @Autowired
     RatingController ratingController;
 
-    @InjectMocks
+
+    private User user;
     private Rating rating;
     private Model model;
     private List<Rating> ratingList = new ArrayList<>();
     private BindingResult result;
 
-    @BeforeEach
-    void setup() {
+    @Before
+    public void setup() {
+        rating = new Rating();
         rating.setMoodysRating("moodys");
         rating.setFitchRating("fitch");
         rating.setOrderNumber(1);
         ratingList.add(rating);
         when(ratingService.getRatingList()).thenReturn(ratingList);
-
     }
 
     @Test

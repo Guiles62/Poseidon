@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 public class TradeService {
 
-    @Autowired
+
     TradeRepository tradeRepository;
 
     public TradeService(TradeRepository tradeRepository) {

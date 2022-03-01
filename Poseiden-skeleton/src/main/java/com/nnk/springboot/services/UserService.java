@@ -34,7 +34,7 @@ import java.util.*;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
+
     UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -85,10 +85,11 @@ public class UserService implements UserDetailsService {
         User userFind = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         logger.info("Call repository to update a user");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String password = encoder.encode(user.getPassword());
         userFind.setFullName(user.getFullName());
         userFind.setUserName(user.getUserName());
         userFind.setRole(user.getRole());
-        userFind.setPassword(encoder.encode(user.getPassword()));
+        userFind.setPassword(password);
         return userRepository.save(user);
     }
 
