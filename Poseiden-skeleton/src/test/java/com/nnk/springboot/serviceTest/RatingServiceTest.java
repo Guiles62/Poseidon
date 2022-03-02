@@ -3,6 +3,7 @@ package com.nnk.springboot.serviceTest;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.repositories.RatingRepository;
 import com.nnk.springboot.services.RatingService;
+import com.nnk.springboot.services.impl.RatingServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class RatingServiceTest {
 
     @Autowired
-    RatingService ratingService;
+    RatingServiceImpl ratingServiceImpl;
 
     @Mock
     RatingRepository ratingRepository;
@@ -44,21 +45,21 @@ public class RatingServiceTest {
         rating.setMoodysRating("moodys test");
         rating.setOrderNumber(1);
         when(ratingRepository.findAll()).thenReturn(ratingList);
-        ratingService = new RatingService(ratingRepository);
+        ratingServiceImpl = new RatingServiceImpl(ratingRepository);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void getRatingListTest() {
         when(ratingRepository.findAll()).thenReturn(ratingList);
-        assertEquals(0,ratingService.getRatingList().size());
+        assertEquals(0,ratingServiceImpl.getRatingList().size());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void saveRatingTest() {
         when(ratingRepository.save(rating)).thenReturn(rating);
-        ratingService.saveRating(rating);
+        ratingServiceImpl.saveRating(rating);
         verify(ratingRepository,times(1)).save(rating);
     }
 
@@ -66,7 +67,7 @@ public class RatingServiceTest {
     @WithMockUser(username = "gui")
     public void findByIdTest() {
         when(ratingRepository.findById(1)).thenReturn(Optional.ofNullable(rating));
-        ratingService.findById(1);
+        ratingServiceImpl.findById(1);
         verify(ratingRepository,times(1)).findById(1);
     }
 
@@ -76,14 +77,14 @@ public class RatingServiceTest {
         when(ratingRepository.save(rating)).thenReturn(rating);
         when(ratingRepository.findById(1)).thenReturn(Optional.ofNullable(rating));
         rating.setFitchRating("fitch test bis");
-        ratingService.updateRating(1,rating);
+        ratingServiceImpl.updateRating(1,rating);
         verify(ratingRepository,times(1)).save(rating);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void deleteTest() {
-        ratingService.delete(rating);
+        ratingServiceImpl.delete(rating);
         verify(ratingRepository,times(1)).delete(rating);
     }
 }

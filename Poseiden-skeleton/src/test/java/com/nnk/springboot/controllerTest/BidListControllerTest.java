@@ -2,8 +2,8 @@ package com.nnk.springboot.controllerTest;
 
 
 import com.nnk.springboot.controllers.BidListController;
+import com.nnk.springboot.controllers.LoginController;
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.BidListService;
 
 import org.junit.Before;
@@ -15,8 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,18 +36,21 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest
 public class BidListControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     BidListService bidListService;
+
+    @MockBean
+    LoginController loginController;
 
 
     BidListController bidListController;
@@ -54,8 +58,7 @@ public class BidListControllerTest {
     @InjectMocks
     private BidList bid;
     private List<BidList> bidLists = new ArrayList<>();
-    private Model model;
-    private BindingResult result;
+
 
     @Before
     public void setup() {
@@ -71,7 +74,6 @@ public class BidListControllerTest {
         bid.setBidListDate(bidListDate);
         bid.setBid(10.0);
         bid.setAsk(10.0);
-        bidListController = new BidListController(bidListService);
         bidLists.add(bid);
         when(bidListService.getBidList()).thenReturn(bidLists);
         when(bidListService.findById(1)).thenReturn(Optional.ofNullable(bid));
@@ -80,7 +82,7 @@ public class BidListControllerTest {
 
 
     @Test
-    @WithUserDetails("gui")
+    @WithMockUser("gui")
     public void homeTest() throws Exception {
         mockMvc.perform(get("/bidList/list")).andExpect(status().isOk());
     }
@@ -94,25 +96,26 @@ public class BidListControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        when(bidListService.saveBid(bid)).thenReturn(bid);
         mockMvc.perform(post("/bidList/validate")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        mockMvc.perform(get("/bidList/update/1")).andExpect(status().isForbidden());
+        when(bidListService.findById(1)).thenReturn(Optional.ofNullable(bid));
+        mockMvc.perform(get("/bidList/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser("gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void updateBidTest() throws Exception {
-        mockMvc.perform(post("/bidList/update/1")).andExpect(status().isForbidden());
+        mockMvc.perform(post("/bidList/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser("gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void deleteBidTest() throws Exception {
-        mockMvc.perform(get("/bidList/delete/1")).andExpect(status().isForbidden());
+        when(bidListService.findById(1)).thenReturn(Optional.ofNullable(bid));
+        mockMvc.perform(get("/bidList/delete/1")).andExpect(redirectedUrl("/bidList/list"));
     }
 }

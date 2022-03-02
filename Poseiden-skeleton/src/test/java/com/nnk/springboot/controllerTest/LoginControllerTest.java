@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -33,14 +34,9 @@ public class LoginControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "gui",authorities = "ADMIN")
+    @WithMockUser(username = "gui",authorities = {"ADMIN"})
     public void getAllUserArticlesTest() throws Exception {
         mockMvc.perform(get("/app/secure/article-details")).andExpect(status().isOk());
     }
 
-    @Test
-    @WithMockUser(username = "gui")
-    public void errorTest() throws Exception {
-        mockMvc.perform(get("/app/error")).andExpect(status().isOk());
-    }
 }

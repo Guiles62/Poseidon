@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <b>RatingService is the class that calls the RatingRepository</b>
+ * <b>RatingService is an interface that will be implemented by RatingServiceImpl</b>
  * <p>
  *     contain methods
  *     <ul>
@@ -25,46 +25,33 @@ import java.util.Optional;
  * @author Guillaume C
  */
 
-@Service
-public class RatingService {
+
+public interface RatingService {
 
 
-    RatingRepository ratingRepository;
 
-    public RatingService(RatingRepository ratingRepository) {
-        this.ratingRepository = ratingRepository;
-    }
 
-    private final static Logger logger = LogManager.getLogger("RatingService");
+    Logger logger = LogManager.getLogger("RatingService");
 
     /**
      * Call repository to find rating List
      * @return the rating list
      */
-    public List<Rating> getRatingList() {
-        logger.info("Call repository to find rating List");
-        return ratingRepository.findAll();
-    }
+    List<Rating> getRatingList();
 
     /**
      * Call repository to save new Rating
      * @param rating rating to save
      * @return call repository to save new rating
      */
-    public Rating saveRating(Rating rating) {
-        logger.info("Call repository to save new Rating");
-        return ratingRepository.save(rating);
-    }
+    Rating saveRating(Rating rating);
 
     /**
      * Call repository to find rating by id
      * @param id id of the rating to find
      * @return call repository to find rating by id
      */
-    public Optional<Rating> findById(int id) {
-        logger.info("Call repository to find rating by id");
-        return ratingRepository.findById(id);
-    }
+    Optional<Rating> findById(int id);
 
     /**
      * Call the repository to update rating by id
@@ -72,22 +59,11 @@ public class RatingService {
      * @param rating rating to update with changes
      * @return call repository to save rating with changes
      */
-    public Rating updateRating(int id, Rating rating) {
-        Rating ratingFind = ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
-        logger.info("Call the repository to update rating by id");
-        ratingFind.setMoodysRating(rating.getMoodysRating());
-        ratingFind.setSandPRating(rating.getSandPRating());
-        ratingFind.setFitchRating(rating.getFitchRating());
-        ratingFind.setOrderNumber(rating.getOrderNumber());
-        return ratingRepository.save(ratingFind);
-    }
+    Rating updateRating(int id, Rating rating);
 
     /**
      * Call repository to delete rating
      * @param rating rating to delete
      */
-    public void delete(Rating rating) {
-        logger.info("Call repository to delete rating");
-        ratingRepository.delete(rating);
-    }
+    void delete(Rating rating);
 }

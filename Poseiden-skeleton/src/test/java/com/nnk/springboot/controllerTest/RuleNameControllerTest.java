@@ -1,8 +1,10 @@
 package com.nnk.springboot.controllerTest;
 
+import com.nnk.springboot.controllers.LoginController;
 import com.nnk.springboot.controllers.RuleNameController;
 import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.services.RuleNameService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,10 +40,12 @@ public class RuleNameControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     RuleNameService ruleNameService;
 
-    @Autowired
+    @MockBean
+    LoginController loginController;
+
     RuleNameController ruleNameController;
 
     @InjectMocks
@@ -50,8 +55,9 @@ public class RuleNameControllerTest {
 
 
 
-    @BeforeEach
-    void setup() {
+    @Before
+    public void setup() {
+        ruleNameController = new RuleNameController(ruleNameService);
         List<RuleName> ruleNameList = new ArrayList<>();
         ruleName.setId(1);
         ruleNameList.add(ruleName);
@@ -74,24 +80,26 @@ public class RuleNameControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        assertEquals("ruleName/add", ruleNameController.validate(ruleName,result,model));
+        mockMvc.perform(post("/ruleName/validate")).andExpect(redirectedUrl("/ruleName/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        assertEquals("ruleName/update",ruleNameController.showUpdateForm(1,model));
+        when(ruleNameService.findById(1)).thenReturn(Optional.of(ruleName));
+        mockMvc.perform(get("/ruleName/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui", authorities = "ADMIN")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void updateRuleNameTest() throws Exception {
-        assertEquals("redirect:/ruleName/list",ruleNameController.updateRuleName(1,ruleName,result,model));
+        mockMvc.perform(post("/ruleName/update/1")).andExpect(redirectedUrl("/ruleName/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui", authorities = "ADMIN")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void deleteRuleNameTest() throws Exception {
-        assertEquals("redirect:/ruleName/list",ruleNameController.deleteRuleName(1,model));
+        when(ruleNameService.findById(1)).thenReturn(Optional.of(ruleName));
+        mockMvc.perform(get("/ruleName/delete/1")).andExpect(redirectedUrl("/ruleName/list"));
     }
 }

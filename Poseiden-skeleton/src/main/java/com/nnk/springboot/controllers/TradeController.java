@@ -36,11 +36,14 @@ import java.security.Principal;
 @Controller
 public class TradeController {
 
-    @Autowired
     TradeService tradeService;
 
     @Autowired
     LoginController loginController;
+
+    public TradeController(TradeService tradeService) {
+        this.tradeService = tradeService;
+    }
 
     private final static Logger logger = LogManager.getLogger("TradeController");
 

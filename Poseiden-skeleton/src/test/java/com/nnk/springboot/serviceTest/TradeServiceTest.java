@@ -3,6 +3,7 @@ package com.nnk.springboot.serviceTest;
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.repositories.TradeRepository;
 import com.nnk.springboot.services.TradeService;
+import com.nnk.springboot.services.impl.TradeServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class TradeServiceTest {
 
     @Autowired
-    TradeService tradeService;
+    TradeServiceImpl tradeServiceImpl;
 
     @Mock
     TradeRepository tradeRepository;
@@ -47,21 +48,21 @@ public class TradeServiceTest {
         trade.setTradeDate(tradeDate);
         trade.setRevisionDate(revisionDate);
         when(tradeRepository.findAll()).thenReturn(tradeList);
-        tradeService = new TradeService(tradeRepository);
+        tradeServiceImpl = new TradeServiceImpl(tradeRepository);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void getTradeListTest() {
         when(tradeRepository.findAll()).thenReturn(tradeList);
-        assertEquals(0, tradeService.getTradeList().size());
+        assertEquals(0, tradeServiceImpl.getTradeList().size());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void saveTradeTest() {
         when(tradeRepository.save(trade)).thenReturn(trade);
-        tradeService.saveTrade(trade);
+        tradeServiceImpl.saveTrade(trade);
         verify(tradeRepository,times(1)).save(trade);
     }
 
@@ -69,7 +70,7 @@ public class TradeServiceTest {
     @WithMockUser(username = "gui")
     public void findByIdTest() {
         when(tradeRepository.findById(1)).thenReturn(Optional.ofNullable(trade));
-        tradeService.findById(1);
+        tradeServiceImpl.findById(1);
         verify(tradeRepository,times(1)).findById(1);
     }
 
@@ -78,14 +79,14 @@ public class TradeServiceTest {
     public void updateTradeTest() {
         when(tradeRepository.findById(1)).thenReturn(Optional.ofNullable(trade));
         when(tradeRepository.save(trade)).thenReturn(trade);
-        tradeService.updateTrade(1, trade);
+        tradeServiceImpl.updateTrade(1, trade);
         verify(tradeRepository,times(1)).save(trade);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void deleteTest() {
-        tradeService.delete(trade);
+        tradeServiceImpl.delete(trade);
         verify(tradeRepository,times(1)).delete(trade);
     }
 }

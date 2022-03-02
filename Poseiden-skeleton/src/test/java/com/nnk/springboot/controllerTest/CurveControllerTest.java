@@ -2,8 +2,10 @@ package com.nnk.springboot.controllerTest;
 
 
 import com.nnk.springboot.controllers.CurveController;
+import com.nnk.springboot.controllers.LoginController;
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.services.CurveService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -12,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -33,8 +37,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class CurveControllerTest {
 
-    @Mock
+    @MockBean
     CurveService curveService;
+
+    @MockBean
+    LoginController loginController;
 
     @Autowired
     CurveController curveController;
@@ -42,13 +49,13 @@ public class CurveControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    private Model model;
+
     @InjectMocks
     private CurvePoint curvePoint;
-    private BindingResult result;
 
-    @BeforeEach
-    void setup() {
+
+    @Before
+    public void setup() {
         List<CurvePoint> curvePointList = new ArrayList<>();
         curvePoint.setId(1);
         curvePoint.setCurveId(2);
@@ -77,21 +84,23 @@ public class CurveControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        assertEquals("curvePoint/update",curveController.showUpdateForm(1,model));
+        when(curveService.getCurvePointById(1)).thenReturn(Optional.of(curvePoint));
+        mockMvc.perform(get("/curvePoint/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void updateCurvePointTest() throws Exception {
-        assertEquals("redirect:/curvePoint/list", curveController.updateCurvePoint(1,curvePoint,result,model));
+        when(curveService.getCurvePointById(1)).thenReturn(Optional.of(curvePoint));
+        mockMvc.perform(post("/curvePoint/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void deleteCurvePointTest() throws Exception {
-        curveController.deleteCurvePoint(1,model);
-        assertEquals(0, curveService.getCurvePointList().size());
+        when(curveService.getCurvePointById(1)).thenReturn(Optional.of(curvePoint));
+        mockMvc.perform(get("/curvePoint/delete/1")).andExpect(redirectedUrl("/curvePoint/list"));
     }
 }

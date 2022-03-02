@@ -1,5 +1,6 @@
 package com.nnk.springboot.controllerTest;
 
+import com.nnk.springboot.controllers.LoginController;
 import com.nnk.springboot.controllers.RatingController;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.domain.User;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,6 +33,8 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,10 +45,13 @@ public class RatingControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     RatingService ratingService;
 
-    @Autowired
+    @MockBean
+    LoginController loginController;
+
+
     RatingController ratingController;
 
 
@@ -56,6 +63,7 @@ public class RatingControllerTest {
 
     @Before
     public void setup() {
+        ratingController = new RatingController(ratingService);
         rating = new Rating();
         rating.setMoodysRating("moodys");
         rating.setFitchRating("fitch");
@@ -79,27 +87,29 @@ public class RatingControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        assertEquals("rating/add", ratingController.validate(rating,result,model));
+        mockMvc.perform(post("/rating/validate")).andExpect(redirectedUrl("/rating/list"));
 
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        assertEquals("rating/update",ratingController.showUpdateForm(1,model));
+        when(ratingService.findById(1)).thenReturn(Optional.ofNullable(rating));
+        mockMvc.perform(get("/rating/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void updateRatingTest() throws Exception {
-        assertEquals("redirect:/rating/list", ratingController.updateRating(1,rating,result,model));
+        when(ratingService.findById(1)).thenReturn(Optional.ofNullable(rating));
+        mockMvc.perform(post("/rating/update/1")).andExpect(redirectedUrl("/rating/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui", authorities = "ADMIN")
+    @WithMockUser(username = "gui", authorities={"ADMIN"})
     public void deleteRatingTest() throws Exception {
-        ratingController.deleteRating(1,model);
-        assertEquals(0, ratingService.getRatingList().size());
+        when(ratingService.findById(1)).thenReturn(Optional.ofNullable(rating));
+        mockMvc.perform(get("/rating/delete/1")).andExpect(redirectedUrl("/rating/list"));
     }
 
 }

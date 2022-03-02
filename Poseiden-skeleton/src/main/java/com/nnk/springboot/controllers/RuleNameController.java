@@ -36,11 +36,15 @@ import java.security.Principal;
 @Controller
 public class RuleNameController {
 
-    @Autowired
+
     RuleNameService ruleNameService;
 
     @Autowired
     LoginController loginController;
+
+    public RuleNameController(RuleNameService ruleNameService) {
+        this.ruleNameService = ruleNameService;
+    }
 
     private final static Logger logger = LogManager.getLogger("RuleNameController");
 

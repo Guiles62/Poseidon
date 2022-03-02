@@ -3,6 +3,7 @@ package com.nnk.springboot.serviceTest;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.services.UserService;
+import com.nnk.springboot.services.impl.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Mock
     UserRepository userRepository;
@@ -45,21 +46,21 @@ public class UserServiceTest {
         user.setPassword(pass);
         user.setRole("ADMIN");
         when(userRepository.findAll()).thenReturn(userList);
-        userService = new UserService(userRepository);
+        userServiceImpl = new UserServiceImpl(userRepository);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void getUserListTest() {
         when(userRepository.findAll()).thenReturn(userList);
-        assertEquals(0, userService.getUserList().size());
+        assertEquals(0, userServiceImpl.getUserList().size());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void addUserTest() {
         when(userRepository.save(user)).thenReturn(user);
-        userService.addUser(user);
+        userServiceImpl.addUser(user);
         verify(userRepository,times(1)).save(user);
     }
 
@@ -67,7 +68,7 @@ public class UserServiceTest {
     @WithMockUser(username = "gui")
     public void findByIdTest() {
         when(userRepository.findById(1)).thenReturn(Optional.ofNullable(user));
-        userService.findById(1);
+        userServiceImpl.findById(1);
         verify(userRepository,times(1)).findById(1);
     }
 
@@ -76,14 +77,14 @@ public class UserServiceTest {
     public void updateUserTest() {
         when(userRepository.findById(1)).thenReturn(Optional.ofNullable(user));
         when(userRepository.save(user)).thenReturn(user);
-        userService.updateUser(1, user);
+        userServiceImpl.updateUser(1, user);
         verify(userRepository,times(1)).save(user);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void deleteTest() {
-        userService.delete(user);
+        userServiceImpl.delete(user);
         verify(userRepository,times(1)).delete(user);
     }
 }

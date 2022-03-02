@@ -3,6 +3,8 @@ package com.nnk.springboot.controllerTest;
 import com.nnk.springboot.controllers.UserController;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
+import com.nnk.springboot.services.impl.UserServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -35,59 +39,60 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
-    UserService userService;
+    @MockBean
+    UserServiceImpl userService;
 
-    @Autowired
     UserController userController;
 
     @InjectMocks
     private User user;
-    private Model model;
-    private BindingResult result;
+
     List<User> userList = new ArrayList<>();
 
 
-    @BeforeEach
-    void setup() {
+    @Before
+    public void setup() {
+        userController = new UserController(userService);
         user.setId(40);
         userList.add(user);
         when(userService.getUserList()).thenReturn(userList);
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void homeTest() throws Exception {
-        assertEquals("user/list", userController.home(model));
+        mockMvc.perform(get("/user/list")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void addUserTest() throws Exception {
-        assertEquals("user/add", userController.addUser(user));
+        mockMvc.perform(get("/user/add")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void validateTest() throws Exception {
-        assertEquals("user/add", userController.validate(user,result,model));
+        mockMvc.perform(post("/user/validate")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        assertEquals("user/update",userController.showUpdateForm(1,model));
+        when(userService.findById(1)).thenReturn(Optional.of(user));
+        mockMvc.perform(get("/user/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void updateUserTest() throws Exception {
-        assertEquals("redirect:/user/list",userController.updateUser(1,user,result,model));
+        mockMvc.perform(post("/user/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui")
-    public void deleteUserTest() throws Exception {;
-        assertEquals("redirect:/user/list", userController.deleteUser(1,model));
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
+    public void deleteUserTest() throws Exception {
+        when(userService.findById(1)).thenReturn(Optional.of(user));
+        mockMvc.perform(get("/user/delete/1")).andExpect(redirectedUrl("/user/list"));
     }
 }

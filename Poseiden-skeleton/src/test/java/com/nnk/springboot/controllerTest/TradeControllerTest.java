@@ -1,5 +1,6 @@
 package com.nnk.springboot.controllerTest;
 
+import com.nnk.springboot.controllers.LoginController;
 import com.nnk.springboot.controllers.TradeController;
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.services.TradeService;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,11 +21,14 @@ import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -34,20 +39,23 @@ public class TradeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     TradeService tradeService;
 
-    @Autowired
+    @MockBean
+    LoginController loginController;
+
+
     TradeController tradeController;
 
     @InjectMocks
     private Trade trade;
     List<Trade>tradeList = new ArrayList<>();
-    private Model model;
-    private BindingResult result;
+
 
     @BeforeEach
     void setup() {
+        tradeController = new TradeController(tradeService);
         trade.setTradeId(1);
         tradeList.add(trade);
         when(tradeService.saveTrade(trade)).thenReturn((trade));
@@ -63,30 +71,32 @@ public class TradeControllerTest {
     @Test
     @WithMockUser(username = "gui")
     public void addTradeTest() throws Exception {
-        assertEquals("trade/add", tradeController.addTrade(trade));
+        mockMvc.perform(get("/trade/add")).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void validateTest() throws Exception {
-        assertEquals("trade/add", tradeController.validate(trade,result,model));
+        mockMvc.perform(post("/trade/validate")).andExpect(redirectedUrl("/trade/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void showUpdateFormTest() throws Exception {
-        assertEquals("trade/update",tradeController.showUpdateForm(1,model));
+        when(tradeService.findById(1)).thenReturn(Optional.of(trade));
+        mockMvc.perform(get("/trade/update/1")).andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "gui",authorities = "ADMIN")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void updateTradeTest() throws Exception {
-        assertEquals("redirect:/trade/list",tradeController.updateTrade(1,trade,result,model));
+        mockMvc.perform(post("/trade/update/1")).andExpect(redirectedUrl("/trade/list"));
     }
 
     @Test
-    @WithMockUser(username = "gui")
+    @WithMockUser(username = "gui", authorities = {"ADMIN"})
     public void deleteTradeTest() throws Exception {
-        assertEquals("redirect:/trade/list", tradeController.deleteTrade(1,model));
+        when(tradeService.findById(1)).thenReturn(Optional.of(trade));
+        mockMvc.perform(get("/trade/delete/1")).andExpect(redirectedUrl("/trade/list"));
     }
 }

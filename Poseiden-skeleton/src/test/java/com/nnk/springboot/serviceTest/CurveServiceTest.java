@@ -3,6 +3,7 @@ package com.nnk.springboot.serviceTest;
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.repositories.CurvePointRepository;
 import com.nnk.springboot.services.CurveService;
+import com.nnk.springboot.services.impl.CurveServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class CurveServiceTest {
 
     @Autowired
-    CurveService curveService;
+    CurveServiceImpl curveServiceImpl;
 
     @Mock
     CurvePointRepository curvePointRepository;
@@ -43,21 +44,21 @@ public class CurveServiceTest {
         curvePoint.setTerm(1.0);
         curvePoint.setId(1);
         when(curvePointRepository.findAll()).thenReturn(curveList);
-        curveService = new CurveService(curvePointRepository);
+        curveServiceImpl = new CurveServiceImpl(curvePointRepository);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void getCurvePointListTest() {
         when(curvePointRepository.findAll()).thenReturn(curveList);
-        assertEquals(0,curveService.getCurvePointList().size());
+        assertEquals(0,curveServiceImpl.getCurvePointList().size());
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void saveCurvePointTest() {
         when(curvePointRepository.save(curvePoint)).thenReturn(curvePoint);
-        curveService.saveCurvePoint(curvePoint);
+        curveServiceImpl.saveCurvePoint(curvePoint);
         verify(curvePointRepository,times(1)).save(curvePoint);
     }
 
@@ -65,7 +66,7 @@ public class CurveServiceTest {
     @WithMockUser(username = "gui")
     public void getCurvePointByIdTest() {
         when(curvePointRepository.findById(1)).thenReturn(Optional.ofNullable(curvePoint));
-        curveService.getCurvePointById(1);
+        curveServiceImpl.getCurvePointById(1);
         verify(curvePointRepository,times(1)).findById(1);
     }
 
@@ -75,14 +76,14 @@ public class CurveServiceTest {
         when(curvePointRepository.findById(1)).thenReturn(Optional.ofNullable(curvePoint));
         when(curvePointRepository.save(curvePoint)).thenReturn(curvePoint);
         curvePoint.setValue(2.0);
-        curveService.updateCurvePoint(1,curvePoint);
+        curveServiceImpl.updateCurvePoint(1,curvePoint);
         verify(curvePointRepository,times(1)).save(curvePoint);
     }
 
     @Test
     @WithMockUser(username = "gui")
     public void deleteTest() {
-        curveService.delete(curvePoint);
+        curveServiceImpl.delete(curvePoint);
         verify(curvePointRepository,times(1)).delete(curvePoint);
     }
 }

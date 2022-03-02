@@ -105,7 +105,7 @@ public class BidListController {
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         logger.info("Get the form to update Bid");
         BidList bid = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        model.addAttribute("bid", bid);
+        model.addAttribute("bidList", bid);
         return "bidList/update";
     }
 
