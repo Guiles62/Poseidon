@@ -55,7 +55,7 @@ public class TradeControllerTest {
 
     @BeforeEach
     void setup() {
-        tradeController = new TradeController(tradeService);
+        tradeController = new TradeController(tradeService, loginController);
         trade.setTradeId(1);
         tradeList.add(trade);
         when(tradeService.saveTrade(trade)).thenReturn((trade));

@@ -62,7 +62,7 @@ public class BidListControllerTest {
 
     @Before
     public void setup() {
-        bidListController = new BidListController(bidListService);
+        bidListController = new BidListController(bidListService, loginController);
         Timestamp creationDate = new Timestamp(System.currentTimeMillis());
         Timestamp bidListDate = new Timestamp(System.currentTimeMillis() - 60);
         bid = new BidList();

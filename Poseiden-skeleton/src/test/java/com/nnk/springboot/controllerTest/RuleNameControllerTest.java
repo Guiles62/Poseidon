@@ -57,7 +57,7 @@ public class RuleNameControllerTest {
 
     @Before
     public void setup() {
-        ruleNameController = new RuleNameController(ruleNameService);
+        ruleNameController = new RuleNameController(ruleNameService, loginController);
         List<RuleName> ruleNameList = new ArrayList<>();
         ruleName.setId(1);
         ruleNameList.add(ruleName);

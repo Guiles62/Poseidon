@@ -35,14 +35,15 @@ import java.security.Principal;
 @Controller
 public class RatingController {
 
-    @Autowired
+
     RatingService ratingService;
 
-    @Autowired
+
     LoginController loginController;
 
-    public RatingController(RatingService ratingService) {
+    public RatingController(RatingService ratingService, LoginController loginController) {
         this.ratingService = ratingService;
+        this.loginController = loginController;
     }
 
     private final static Logger logger = LogManager.getLogger("RatingController");

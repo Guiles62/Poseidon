@@ -63,7 +63,7 @@ public class RatingControllerTest {
 
     @Before
     public void setup() {
-        ratingController = new RatingController(ratingService);
+        ratingController = new RatingController(ratingService, loginController);
         rating = new Rating();
         rating.setMoodysRating("moodys");
         rating.setFitchRating("fitch");

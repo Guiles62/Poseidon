@@ -35,11 +35,15 @@ import java.security.Principal;
 @Controller
 public class CurveController {
 
-    @Autowired
+
     CurveService curveService;
 
-    @Autowired
     LoginController loginController;
+
+    public CurveController(CurveService curveService, LoginController loginController) {
+        this.curveService = curveService;
+        this.loginController = loginController;
+    }
 
     private final static Logger logger = LogManager.getLogger("CurveController");
 

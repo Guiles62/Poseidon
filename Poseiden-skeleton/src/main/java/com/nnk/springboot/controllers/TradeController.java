@@ -38,11 +38,11 @@ public class TradeController {
 
     TradeService tradeService;
 
-    @Autowired
     LoginController loginController;
 
-    public TradeController(TradeService tradeService) {
+    public TradeController(TradeService tradeService, LoginController loginController) {
         this.tradeService = tradeService;
+        this.loginController = loginController;
     }
 
     private final static Logger logger = LogManager.getLogger("TradeController");

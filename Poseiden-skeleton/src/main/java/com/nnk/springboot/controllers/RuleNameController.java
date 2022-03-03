@@ -39,11 +39,12 @@ public class RuleNameController {
 
     RuleNameService ruleNameService;
 
-    @Autowired
+
     LoginController loginController;
 
-    public RuleNameController(RuleNameService ruleNameService) {
+    public RuleNameController(RuleNameService ruleNameService, LoginController loginController) {
         this.ruleNameService = ruleNameService;
+        this.loginController = loginController;
     }
 
     private final static Logger logger = LogManager.getLogger("RuleNameController");

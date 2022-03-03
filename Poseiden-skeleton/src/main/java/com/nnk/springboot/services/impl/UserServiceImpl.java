@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userFind.setUserName(user.getUserName());
         userFind.setRole(user.getRole());
         userFind.setPassword(password);
-        return userRepository.save(user);
+        return userRepository.save(userFind);
     }
 
     /**

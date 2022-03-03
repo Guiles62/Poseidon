@@ -41,14 +41,14 @@ import java.util.Map;
 public class LoginController {
 
 
-    @Autowired
     private UserService userService;
 
     private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     private final static Logger logger = LogManager.getLogger("LoginController");
 
-    public LoginController(OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+    public LoginController(UserService userService, OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+        this.userService = userService;
         this.oAuth2AuthorizedClientService = oAuth2AuthorizedClientService;
     }
 

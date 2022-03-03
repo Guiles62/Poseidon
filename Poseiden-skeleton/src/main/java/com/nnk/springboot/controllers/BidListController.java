@@ -38,12 +38,13 @@ public class BidListController {
 
     BidListService bidListService;
 
-    @Autowired
+
     LoginController loginController;
 
 
-    public BidListController(BidListService bidListService) {
+    public BidListController(BidListService bidListService, LoginController loginController) {
         this.bidListService = bidListService;
+        this.loginController = loginController;
     }
 
     private final static Logger logger = LogManager.getLogger("BidListController");
